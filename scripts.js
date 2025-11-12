@@ -857,3 +857,82 @@ document.querySelectorAll(".anchor-link").forEach(n => n.textContent = "");
     });
   });
 })();
+// ===== Smooth scroll with fixed header & a11y =====
+(function () {
+  // Найдём фиксированную шапку, если есть
+  const header = document.querySelector('header, .header, .site-header');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function getHeaderOffset() {
+    const cssVar = getComputedStyle(document.documentElement).getPropertyValue('--header-offset').trim();
+    const varPx = cssVar.endsWith('px') ? parseFloat(cssVar) : null;
+    const domPx = header ? header.getBoundingClientRect().height : 0;
+    // Приоритет у CSS-переменной; если не задана — берём фактическую высоту хедера
+    return (varPx ?? domPx) || 0;
+  }
+
+  function smoothScrollTo(targetEl) {
+    const headerOffset = getHeaderOffset();
+    const rect = targetEl.getBoundingClientRect();
+    const absoluteY = window.pageYOffset + rect.top;
+    const y = Math.max(absoluteY - headerOffset, 0);
+
+    if (prefersReduced) {
+      window.scrollTo(0, y);
+    } else {
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+
+    // Фокус для клавиатуры/скринридеров
+    if (!targetEl.hasAttribute('tabindex')) {
+      targetEl.setAttribute('tabindex', '-1');
+    }
+    targetEl.focus({ preventScroll: true });
+  }
+
+  // Обработчик кликов по якорным ссылкам
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const hash = link.getAttribute('href');
+    // Пропускаем пустые или "#" ссылки
+    if (!hash || hash === '#') return;
+
+    const target = document.querySelector(hash);
+    if (!target) return;
+
+    e.preventDefault();
+    smoothScrollTo(target);
+
+    // Аккуратно меняем адресную строку без рывка страницы
+    history.pushState(null, '', hash);
+  });
+
+  // Если страница загрузилась уже с хэшем — скорректируем позицию
+  window.addEventListener('load', () => {
+    if (location.hash) {
+      const target = document.querySelector(decodeURIComponent(location.hash));
+      if (target) setTimeout(() => smoothScrollTo(target), 0);
+    }
+  });
+})();
+/* === Simple Summary: плавный переход к разделу по клику на внутренние ссылки === */
+(function () {
+  const root = document.getElementById('simple-summary');
+  if (!root) return;
+
+  root.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href');
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const header = document.querySelector('header');
+    const offset = header ? (header.getBoundingClientRect().height + 12) : 12;
+    const top = window.scrollY + target.getBoundingClientRect().top - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+    history.replaceState(null, '', id);
+  });
+})();
