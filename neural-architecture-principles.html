@@ -1,1123 +1,2437 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Архитектурные принципы нейросетевых систем | MRV's Project</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+  <body>
     <div id="read-progress"></div>
 
     <!-- Canvas для нейросетевого фона -->
     <div class="background-container">
-        <canvas id="gridCanvas"></canvas>
-        <canvas id="neuralCanvas"></canvas>
-        <div class="particles-container"></div>
+      <canvas id="gridCanvas"></canvas>
+      <canvas id="neuralCanvas"></canvas>
+      <div class="particles-container"></div>
     </div>
-    
-
 
     <!-- Основной контент -->
     <div class="main-content">
-        
-        <!-- Шапка -->
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <a href="index.html" class="logo" aria-label="DM Project">
-                       
-                        DM'<span class="logo-title">Project</span>
-                    </a>
-                    <nav>
-                        <ul>
-                            <li><a href="index.html#about">О проекте</a></li>
-                            <li><a href="index.html#ai-overview">Модели ИИ</a></li>
-                            <li><a href="index.html#ai-platforms">Платформы</a></li>
-                            <li><a href="index.html#articles">Исследования</a></li>
-                        </ul>
-                    </nav>
-                    <button class="mobile-menu-btn">☰</button>
-                </div>
-            </div>
-        </header>
+      <!-- Шапка -->
+      <header>
+        <div class="container">
+          <div class="header-content">
+            <a href="index.html" class="logo" aria-label="DM Project">
+              DM'<span class="logo-title">Project</span>
+            </a>
+            <nav>
+              <ul>
+                <li><a href="index.html#about">О проекте</a></li>
+                <li><a href="index.html#ai-overview">Модели ИИ</a></li>
+                <li><a href="index.html#ai-platforms">Платформы</a></li>
+                <li><a href="index.html#articles">Исследования</a></li>
+              </ul>
+            </nav>
+            <button class="mobile-menu-btn">☰</button>
+          </div>
+        </div>
+      </header>
 
-        <!-- Хлебные крошки -->
-        <section class="breadcrumbs-section">
-            <div class="container">
-                <nav class="breadcrumbs">
-                    <a href="index.html">Главная</a>
-                    <span class="breadcrumb-separator">/</span>
-                    <a href="index.html#articles">Исследования</a>
-                    <span class="breadcrumb-separator">/</span>
-                    <span class="current">Архитектурные принципы нейросетевых систем</span>
-                </nav>
-            </div>
-        </section>
+      <!-- Хлебные крошки -->
+      <section class="breadcrumbs-section">
+        <div class="container">
+          <nav class="breadcrumbs">
+            <a href="index.html">Главная</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="index.html#articles">Исследования</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="current"
+              >Архитектурные принципы нейросетевых систем</span
+            >
+          </nav>
+        </div>
+      </section>
 
-        <!-- Модальные окна: подробности карточек применений -->
-        <div class="model-modal" id="app-vision-modal" role="dialog" aria-modal="true" aria-labelledby="app-vision-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-vision-title">Компьютерное зрение</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/pc-vision.png');"></div>
-                    <div class="model-info-grid">
-                        <div class="model-info-card">
-                            <h4><i class="fas fa-lightbulb"></i> Что это</h4>
-                            <p>Комплекс методов обработки визуальных данных: от простой классификации до детекции, сегментации, трекинга и OCR. Базируется на CNN и Vision Transformers (ViT/DETR): первые хорошо ловят локальные паттерны, вторые — глобальные отношения в изображении. На практике сочетают оба подхода для лучшей точности и скорости.</p>
-                        </div>
-                        <div class="model-info-card">
-                            <h4><i class="fas fa-tools"></i> Технологии</h4>
-                            <p>ResNet/EfficientNet (классификация, бэкбоны), YOLO/RT-DETR (реал-тайм-детекция), Mask R-CNN/Segment Anything (сегментация), ViT/DETR (трансформеры для изображений), OCR-стек (CTC/Attention). В продакшене важны аугментации, квантизация, трекинг и on-device оптимизация.</p>
-                        </div>
-                    </div>
-                    <div class="model-details">
-                        <h3>Примеры</h3>
-                        <ul>
-                            <li>Контроль качества (дефекты/несоответствия, подсчёт объектов)</li>
-                            <li>Видео-аналитика: детекция/трек людей и транспорта, поведенческие события</li>
-                            <li>OCR+структурирование документов (чеки, накладные, формы)</li>
-                            <li>Медицина: анализ снимков (КТ/МРТ), измерения, подсветка подозрительных областей</li>
-                            <li>Ритейл: планограммы, подсчёт посетителей, кассовые аномалии</li>
-                        </ul>
-                    </div>
-                </div>
+      <!-- Модальные окна: подробности карточек применений -->
+      <div
+        class="model-modal"
+        id="app-vision-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-vision-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-vision-title">Компьютерное зрение</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/pc-vision.png')"
+            ></div>
+            <div class="model-info-grid">
+              <div class="model-info-card">
+                <h4><i class="fas fa-lightbulb"></i> Что это</h4>
+                <p>
+                  Комплекс методов обработки визуальных данных: от простой
+                  классификации до детекции, сегментации, трекинга и OCR.
+                  Базируется на CNN и Vision Transformers (ViT/DETR): первые
+                  хорошо ловят локальные паттерны, вторые — глобальные отношения
+                  в изображении. На практике сочетают оба подхода для лучшей
+                  точности и скорости.
+                </p>
+              </div>
+              <div class="model-info-card">
+                <h4><i class="fas fa-tools"></i> Технологии</h4>
+                <p>
+                  ResNet/EfficientNet (классификация, бэкбоны), YOLO/RT-DETR
+                  (реал-тайм-детекция), Mask R-CNN/Segment Anything
+                  (сегментация), ViT/DETR (трансформеры для изображений),
+                  OCR-стек (CTC/Attention). В продакшене важны аугментации,
+                  квантизация, трекинг и on-device оптимизация.
+                </p>
+              </div>
             </div>
+            <div class="model-details">
+              <h3>Примеры</h3>
+              <ul>
+                <li>
+                  Контроль качества (дефекты/несоответствия, подсчёт объектов)
+                </li>
+                <li>
+                  Видео-аналитика: детекция/трек людей и транспорта,
+                  поведенческие события
+                </li>
+                <li>
+                  OCR+структурирование документов (чеки, накладные, формы)
+                </li>
+                <li>
+                  Медицина: анализ снимков (КТ/МРТ), измерения, подсветка
+                  подозрительных областей
+                </li>
+                <li>
+                  Ритейл: планограммы, подсчёт посетителей, кассовые аномалии
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-healthcare-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-healthcare-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-healthcare-title">Медицина</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/med.png')"
+            ></div>
+            <div class="model-info-grid">
+              <div class="model-info-card">
+                <h4><i class="fas fa-heartbeat"></i> Применения</h4>
+                <p>
+                  Диагностика по изображениям (рентген/КТ/МРТ/УЗИ), сегментация
+                  очагов, приоритизация снимков, первичные подсказки врачу,
+                  извлечение данных из ЭМК. МЛ-модели помогают обнаруживать
+                  патологии раньше и сокращать время чтения.
+                </p>
+              </div>
+              <div class="model-info-card">
+                <h4><i class="fas fa-shield-alt"></i> Риски</h4>
+                <p>
+                  Клинико-техническая валидация, смещение данных
+                  (сайты/сканеры), интерпретируемость и аудит,
+                  безопасность/приватность (HIPAA/GDPR), прослеживаемость
+                  версий, бдительная работа с
+                  ложноположительными/ложноотрицательными результатами.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-autonomous-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-autonomous-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-autonomous-title">Автономный транспорт</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/car.png')"
+            ></div>
+            <p>
+              Стек включает восприятие (камеры/радар/лидар), SLAM/локализацию,
+              предсказание траекторий участников и планирование манёвров в
+              реальном времени. МЛ-модели учатся на масштабных логах, а
+              безопасность достигается избыточностью датчиков, симуляцией
+              “угловых” сценариев и строгими правилами fallback.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-biometrics-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-biometrics-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-biometrics-title">Биометрия</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/biomet.png')"
+            ></div>
+            <p>
+              Распознавание лица/голоса/радужки/отпечатков, поиск по базе и
+              верификация “1:1”. Критичны антиспуфинг
+              (маски/фото/видео-подделки), устойчивость к освещению/ракурсам,
+              защита шаблонов (темплейтов) и соблюдение регуляторики
+              (биометрические базы, согласия, сроки хранения).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-translation-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-translation-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-translation-title">Машинный перевод</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/translate.png')"
+            ></div>
+            <p>
+              NMT-системы на трансформерах (En↔Ru и десятки пар) с адаптацией к
+              домену (термины, стиль) и контролем качества (BLEU, COMET, MQM).
+              Для диалогов и интерфейсов добавляют пост-редактирование человеком
+              и глоссарии с “жёсткой” вставкой терминов.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-chatbots-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-chatbots-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-chatbots-title">Чат-боты и ассистенты</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/assistant.png')"
+            ></div>
+            <p>
+              Полный стек: классификация интентов, NER/slot-filling, управление
+              диалогом, RAG (поиск по базе+переранжирование) для фактической
+              точности. В продакшене — безопасные инструкции, фильтры контента,
+              телеметрия качества и “тесты на правду” (grounded evaluation).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-doc-analysis-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-doc-analysis-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-doc-analysis-title">Анализ документов</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/emote.png')"
+            ></div>
+            <p>
+              Стадии: классификация типов, извлечение полей (ключ-значение),
+              табличный парсинг, суммаризация и валидация бизнес-правилами. Для
+              счётов/накладных — шаблонно-устойчивые экстракторы + LLM-проверки;
+              для PDF-отсканов — связка OCR+layout-моделей.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-search-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-search-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-search-title">Поиск и ранжирование</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/searchinf.png')"
+            ></div>
+            <p>
+              Гибридный стек: BM25 для точных совпадений + векторный поиск
+              (эмбеддинги) для смысловой близости. Сверху — нейронные
+              ранкеры/переранкеры (cross-encoder) и правила бизнеса. Метрики:
+              nDCG/MRR/Recall@k, офлайн-A/B, защита от спама и дубликатов.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-speech-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-speech-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-speech-title">Распознавание речи</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/golos.png')"
+            ></div>
+            <p>
+              ASR-модели (CTC/Transducer/Attention) + языковые модели для
+              правописания и пунктуации. Важны шумоустойчивость, диалекты,
+              ономастика и доменная адаптация (словарь брендов/терминов).
+              Пример: семейство Whisper/другие мультиязычные модели с on-device
+              и серверным режимами.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-music-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-music-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-music-title">Генерация музыки</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/audio.png')"
+            ></div>
+            <p>
+              Диффузионные/авторегрессионные модели по аудио/миди: контроль
+              жанра, темпа, длительности и инструментовки. Производственные
+              вопросы: авторское право/лицензии семплов, фильтрация обучающих
+              данных, водяные знаки и атрибуция источников.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-signals-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-signals-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-signals-title">Сигналы и временные ряды</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="background-image: url('./images/use-cards/genaudio.png')"
+            ></div>
+            <p>
+              Классические и DL-подходы к прогнозу, детекция аномалий,
+              сезонность/тренды, кросс-корреляции между датчиками. Для
+              промышленности — раннее обнаружение отказов (predictive
+              maintenance), сглаживание шумов, интерполяция пропусков,
+              бэктестинг стратегий реагирования.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="model-modal"
+        id="app-patient-monitoring-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="app-patient-monitoring-title"
+      >
+        <div class="model-modal-content">
+          <div class="model-modal-header">
+            <h2 id="app-patient-monitoring-title">Мониторинг пациентов</h2>
+            <button class="close-modal" aria-label="Закрыть">&times;</button>
+          </div>
+          <div class="model-modal-body">
+            <div
+              class="model-modal-img"
+              style="
+                background-image: url('./images/use-cards/biometsignal.png');
+              "
+            ></div>
+            <p>
+              Непрерывный анализ ЭКГ/SpO₂/ЧСС/дыхания, скоры риска, алертинг при
+              отклонениях и трендах. Требуются устойчивость к артефактам,
+              персонализация порогов, защищённая передача/хранение данных и
+              рабочие процессы для верификации клиницистом (чтобы избегать
+              “alarm fatigue”).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Заголовок статьи -->
+      <!-- ЗАМЕНИТЕ весь существующий article-header-section на этот код -->
+      <section class="article-header-section">
+        <!-- Фоновые частицы -->
+        <div class="article-header-particles">
+          <div class="particle type-1" style="top: 20%; left: 10%"></div>
+          <div class="particle type-2" style="top: 60%; left: 80%"></div>
+          <div class="particle type-3" style="top: 40%; left: 30%"></div>
+          <div class="particle type-1" style="top: 80%; left: 60%"></div>
+          <div class="particle type-2" style="top: 30%; left: 90%"></div>
         </div>
 
-        <div class="model-modal" id="app-healthcare-modal" role="dialog" aria-modal="true" aria-labelledby="app-healthcare-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-healthcare-title">Медицина</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/med.png');"></div>
-                    <div class="model-info-grid">
-                        <div class="model-info-card">
-                            <h4><i class="fas fa-heartbeat"></i> Применения</h4>
-                            <p>Диагностика по изображениям (рентген/КТ/МРТ/УЗИ), сегментация очагов, приоритизация снимков, первичные подсказки врачу, извлечение данных из ЭМК. МЛ-модели помогают обнаруживать патологии раньше и сокращать время чтения.</p>
-                        </div>
-                        <div class="model-info-card">
-                            <h4><i class="fas fa-shield-alt"></i> Риски</h4>
-                            <p>Клинико-техническая валидация, смещение данных (сайты/сканеры), интерпретируемость и аудит, безопасность/приватность (HIPAA/GDPR), прослеживаемость версий, бдительная работа с ложноположительными/ложноотрицательными результатами.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-autonomous-modal" role="dialog" aria-modal="true" aria-labelledby="app-autonomous-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-autonomous-title">Автономный транспорт</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/car.png');"></div>
-                    <p>Стек включает восприятие (камеры/радар/лидар), SLAM/локализацию, предсказание траекторий участников и планирование манёвров в реальном времени. МЛ-модели учатся на масштабных логах, а безопасность достигается избыточностью датчиков, симуляцией “угловых” сценариев и строгими правилами fallback.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-biometrics-modal" role="dialog" aria-modal="true" aria-labelledby="app-biometrics-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-biometrics-title">Биометрия</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/biomet.png');"></div>
-                    <p>Распознавание лица/голоса/радужки/отпечатков, поиск по базе и верификация “1:1”. Критичны антиспуфинг (маски/фото/видео-подделки), устойчивость к освещению/ракурсам, защита шаблонов (темплейтов) и соблюдение регуляторики (биометрические базы, согласия, сроки хранения).</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-translation-modal" role="dialog" aria-modal="true" aria-labelledby="app-translation-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-translation-title">Машинный перевод</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/translate.png');"></div>
-                    <p>NMT-системы на трансформерах (En↔Ru и десятки пар) с адаптацией к домену (термины, стиль) и контролем качества (BLEU, COMET, MQM). Для диалогов и интерфейсов добавляют пост-редактирование человеком и глоссарии с “жёсткой” вставкой терминов.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-chatbots-modal" role="dialog" aria-modal="true" aria-labelledby="app-chatbots-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-chatbots-title">Чат-боты и ассистенты</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/assistant.png');"></div>
-                    <p>Полный стек: классификация интентов, NER/slot-filling, управление диалогом, RAG (поиск по базе+переранжирование) для фактической точности. В продакшене — безопасные инструкции, фильтры контента, телеметрия качества и “тесты на правду” (grounded evaluation).</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-doc-analysis-modal" role="dialog" aria-modal="true" aria-labelledby="app-doc-analysis-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-doc-analysis-title">Анализ документов</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/emote.png');"></div>
-                    <p>Стадии: классификация типов, извлечение полей (ключ-значение), табличный парсинг, суммаризация и валидация бизнес-правилами. Для счётов/накладных — шаблонно-устойчивые экстракторы + LLM-проверки; для PDF-отсканов — связка OCR+layout-моделей.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-search-modal" role="dialog" aria-modal="true" aria-labelledby="app-search-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-search-title">Поиск и ранжирование</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/searchinf.png');"></div>
-                    <p>Гибридный стек: BM25 для точных совпадений + векторный поиск (эмбеддинги) для смысловой близости. Сверху — нейронные ранкеры/переранкеры (cross-encoder) и правила бизнеса. Метрики: nDCG/MRR/Recall@k, офлайн-A/B, защита от спама и дубликатов.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-speech-modal" role="dialog" aria-modal="true" aria-labelledby="app-speech-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-speech-title">Распознавание речи</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/golos.png');"></div>
-                    <p>ASR-модели (CTC/Transducer/Attention) + языковые модели для правописания и пунктуации. Важны шумоустойчивость, диалекты, ономастика и доменная адаптация (словарь брендов/терминов). Пример: семейство Whisper/другие мультиязычные модели с on-device и серверным режимами.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-music-modal" role="dialog" aria-modal="true" aria-labelledby="app-music-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-music-title">Генерация музыки</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/audio.png');"></div>
-                    <p>Диффузионные/авторегрессионные модели по аудио/миди: контроль жанра, темпа, длительности и инструментовки. Производственные вопросы: авторское право/лицензии семплов, фильтрация обучающих данных, водяные знаки и атрибуция источников.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-signals-modal" role="dialog" aria-modal="true" aria-labelledby="app-signals-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-signals-title">Сигналы и временные ряды</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/genaudio.png');"></div>
-                    <p>Классические и DL-подходы к прогнозу, детекция аномалий, сезонность/тренды, кросс-корреляции между датчиками. Для промышленности — раннее обнаружение отказов (predictive maintenance), сглаживание шумов, интерполяция пропусков, бэктестинг стратегий реагирования.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="model-modal" id="app-patient-monitoring-modal" role="dialog" aria-modal="true" aria-labelledby="app-patient-monitoring-title">
-            <div class="model-modal-content">
-                <div class="model-modal-header">
-                    <h2 id="app-patient-monitoring-title">Мониторинг пациентов</h2>
-                    <button class="close-modal" aria-label="Закрыть">&times;</button>
-                </div>
-                <div class="model-modal-body">
-                    <div class="model-modal-img" style="background-image: url('./images/use-cards/biometsignal.png');"></div>
-                    <p>Непрерывный анализ ЭКГ/SpO₂/ЧСС/дыхания, скоры риска, алертинг при отклонениях и трендах. Требуются устойчивость к артефактам, персонализация порогов, защищённая передача/хранение данных и рабочие процессы для верификации клиницистом (чтобы избегать “alarm fatigue”).</p>
-                </div>
-            </div>
-        </div>
-
-
-       <!-- Заголовок статьи -->
-<!-- ЗАМЕНИТЕ весь существующий article-header-section на этот код -->
-<section class="article-header-section">
-    <!-- Фоновые частицы -->
-    <div class="article-header-particles">
-        <div class="particle type-1" style="top: 20%; left: 10%;"></div>
-        <div class="particle type-2" style="top: 60%; left: 80%;"></div>
-        <div class="particle type-3" style="top: 40%; left: 30%;"></div>
-        <div class="particle type-1" style="top: 80%; left: 60%;"></div>
-        <div class="particle type-2" style="top: 30%; left: 90%;"></div>
-    </div>
-    
-    <div class="container">
-        <div class="article-header">
+        <div class="container">
+          <div class="article-header">
             <div class="article-meta">
-                <span class="article-category">Глубокое обучение</span>
-                <span class="article-date">15 октября 2025</span>
-                <span class="article-reading-time">⏱️ 25 мин чтения </span>
+              <span class="article-category">Глубокое изучение</span>
+              <span class="article-date">15 октября 2025</span>
+              <span class="article-reading-time">⏱️ 25 мин чтения </span>
             </div>
-            
-            <h1 class="article-title">Архитектурные принципы нейросетевых систем и методологии машинного обучения</h1>
-            
+
+            <h1 class="article-title">
+              Архитектурные принципы нейросетевых систем и методологии машинного
+              обучения
+            </h1>
+
             <div class="article-author">
-                <div class="author-avatar">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-                <div class="author-info">
-                    <span class="author-name">Мудрагелев Роман Васильевич</span>
-                    <span class="author-role">Ученик 9 класса • Разработчик проекта</span>
-                </div>
+              <div class="author-avatar">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="author-info">
+                <span class="author-name">Мудрагелев Роман Васильевич</span>
+                <span class="author-role"
+                  >Ученик 9 класса • Разработчик проекта</span
+                >
+              </div>
             </div>
-            
+
             <div class="article-stats">
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <div>
-                        <div class="stat-value">14 разделов</div>
-                        <div class="stat-label">Структура</div>
-                    </div>
+              <div class="stat-item">
+                <div class="stat-icon">
+                  <i class="fas fa-layer-group"></i>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <div>
-                        <div class="stat-value">30+ иллюстраций</div>
-                        <div class="stat-label">Визуализация</div>
-                    </div>
+                <div>
+                  <div class="stat-value">14 разделов</div>
+                  <div class="stat-label">Структура</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div>
-                        <div class="stat-value">10+ примеров</div>
-                        <div class="stat-label">Практика</div>
-                    </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-icon">
+                  <i class="fas fa-image"></i>
                 </div>
+                <div>
+                  <div class="stat-value">30+ иллюстраций</div>
+                  <div class="stat-label">Визуализация</div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-icon">
+                  <i class="fas fa-code"></i>
+                </div>
+                <div>
+                  <div class="stat-value">10+ примеров</div>
+                  <div class="stat-label">Практика</div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
-
-        <!-- Основное содержание статьи -->
-         
-        <article class="article-content-section">
-            <div class="container">
-                <div class="article-content">
-                 <!-- Блок с оглавлением -->
-<!-- ЗАМЕНИТЕ существующий article-toc на этот код -->
-<aside class="article-toc scrollbar-visible gradient-scrollbar">
-    <div class="toc-header">
-        <h3>Содержание статьи</h3>
-    </div>
-    <div class="toc-content">
-        <nav class="toc-nav">
-            <ul>
-                <li><a href="#section1" class="toc-link">Введение в архитектуру нейросетей</a></li>
-                <li><a href="#section2" class="toc-link">Фундаментальные концепции нейросетевых систем</a></li>
-                <li><a href="#section3" class="toc-link">Эволюция нейросетевых технологий</a></li>
-                <li><a href="#section4" class="toc-link">Основные компоненты нейронных сетей</a></li>
-                <li><a href="#section5" class="toc-link">Типы архитектур нейронных сетей</a></li>
-                <li><a href="#section6" class="toc-link">Сверточные нейронные сети (CNN)</a></li>
-                <li><a href="#section7" class="toc-link">Рекуррентные нейронные сети (RNN)</a></li>
-                <li><a href="#section8" class="toc-link">Трансформеры</a></li>
-                <li><a href="#section9" class="toc-link">Генеративные модели</a></li>
-                <li><a href="#section10" class="toc-link">Методологии машинного обучения</a></li>
-                <li><a href="#section11" class="toc-link">Практические применения нейронных сетей</a></li>
-                <li><a href="#section12" class="toc-link">Современные тренды и перспективы развития</a></li>
-                <li><a href="#section13" class="toc-link">Методологические вызовы и ограничения</a></li>
-                <li><a href="#section14" class="toc-link">Заключение</a></li>
-            </ul>
-        </nav>
-    </div>
-</aside>
-
-                    <!-- Основной текст статьи -->
-                    <div class="article-main">
-                        <!-- Введение -->
-                        <section id="section1" class="article-section">
-                            <h2>Введение в архитектуру нейросетей</h2>
-                            <div class="section-summary --grid-divided">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Нейросеть — это композиция простых «нейронов», которые учатся из данных.</li>
-    <li>Слои и активации позволяют аппроксимировать сложные нелинейные зависимости.</li>
-    <li>Обучение = поиск весов, минимизирующих ошибку на примерах.</li>
-  </ul>
-</div>
-                            <p>Искусственные нейронные сети представляют собой один из наиболее динамично развивающихся разделов современной компьютерной науки, трансформирующий подходы к решению сложных задач в области компьютерного зрения, обработки естественного языка, распознавания образов и предиктивной аналитики. Нейросетевые технологии, основанные на математическом моделировании биологических процессов человеческого мозга, демонстрируют беспрецедентную эффективность в задачах, требующих выявления сложных нелинейных зависимостей в больших массивах данных.</p>
-                            
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/1.1.jpeg" alt="Архитектура нейронной сети">
-                                <p class="image-caption">Рис. 1. Базовая архитектура нейронной сети</p>
-                            </div>
-                        </section>
-
-                        <!-- Фундаментальные концепции -->
-                        <section id="section2" class="article-section">
-                            <h2>Фундаментальные концепции нейросетевых систем</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Параметры (веса/смещения) определяют поведение сети.</li>
-    <li>Функция потерь измеряет ошибку предсказаний.</li>
-    <li>Градиентный спуск корректирует веса в сторону уменьшения ошибки.</li>
-  </ul>
-</div>
-                            <p>Искусственная нейронная сеть представляет собой математическую модель, воспроизводящую принципы функционирования биологических нейронных структур для создания систем с элементами искусственного интеллекта. Базовым элементом такой системы является искусственный нейрон — простая функция, принимающая взвешенные входные сигналы, суммирующая их и пропускающая через нелинейную функцию активации для генерации выходного сигнала.</p>
-
-                            <div class="code-block block-code">
-                                <div class="code-header">
-                                    <span>Математическая модель нейрона</span>
-                                    <button class="copy-code">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                                <div class="math-block">$$ y = f\!\left( \sum_i w_i x_i + b \right) $$</div></div>
-                                <div class="formula-explainer">
-  <strong>Идея:</strong> нейрон суммирует входы с весами и добавляет смещение b, затем проходит через нелинейность f (например, ReLU или сигмоиду). Это позволяет сети моделировать сложные зависимости, а не только линейные.
-</div>
-                            <p>Интуитивно это так: нейрон собирает “доказательства” из входов. Каждый вход xᵢ умножается на вес wᵢ (насколько он важен), к сумме прибавляется смещение b (порог срабатывания), а затем применяется нелинейность f, чтобы модель умела отличать “чуть-чуть больше” от “принципиально иначе”. Без f нейросеть вела бы себя как обычная линейная формула; именно нелинейность позволяет распознавать сложные паттерны. Пример: в задаче распознавания цифр часть весов “активируется” на вертикальные штрихи, часть — на дуги; функция активации решает, сработал ли нужный набор признаков достаточно сильно, чтобы выдать уверенный ответ.</p>
-
-                            <p>Процесс обучения нейронной сети базируется на алгоритме обратного распространения ошибки (backpropagation), который позволяет корректировать веса синаптических связей на основе разности между желаемым и фактическим выходом. Градиент функции потерь вычисляется для каждого параметра сети, после чего веса обновляются в направлении, минимизирующем ошибку:</p>
-
-                            <div class="code-block block-code">
-                                <div class="code-header">
-                                    <span>Обновление весов</span>
-                                    <button class="copy-code">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                                <div class="math-block">$$ w_{\text{new}} = w_{\text{old}} - \eta \, \frac{\partial L}{\partial w} $$</div></div>
-<div class="formula-explainer">
-  <strong>Идея:</strong> градиентный спуск. Мы двигаем веса в сторону, где ошибка L уменьшается. η — «скорость обучения»: чем больше, тем агрессивнее шаг.
-</div>
-                            <p>где η — скорость обучения (насколько “широкими шагами” обновлять веса), а L — функция потерь (насколько текущий ответ модели плох). Знак “минус” означает движение в сторону уменьшения ошибки. На практике градиент считают по мини-батчу (не по всей выборке, чтобы ускорить обучение), а η подбирают так, чтобы шаг был устойчивым: слишком маленький — будем учиться очень долго, слишком большой — начнём “скакать” вокруг минимума. Часто используют расписания η (уменьшают во времени) и оптимизаторы вроде Adam, которые автоматически подстраивают шаги для разных весов.</p>
-                        </section>
-
-                        <!-- Эволюция нейросетевых технологий -->
-                        <section id="section3" class="article-section">
-                            <h2>Эволюция нейросетевых технологий</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>От простых персептронов к глубоким CNN/RNN и трансформерам.</li>
-    <li>Решающее ускорение дали данные, GPU и новые архитектуры.</li>
-    <li>Современные модели комбинируют обучение с учителем/без и генерацию.</li>
-  </ul>
-</div>
-                            <p>История развития нейронных сетей характеризуется несколькими революционными вехами. В 1998 году Ян ЛеКун представил архитектуру LeNet-5 — одну из первых сверточных нейронных сетей, предназначенную для распознавания рукописных цифр. Эта архитектура заложила фундаментальные принципы глубокого обучения, особенно в контексте обработки изображений с использованием пространственной корреляции пикселей.</p>
-
-                            <p>Период с 1998 по 2010 годы характеризовался относительной стагнацией в развитии нейросетевых технологий, несмотря на постепенное совершенствование алгоритмов. Прорыв произошел в 2012 году, когда Алексей Крижевский представил AlexNet — глубокую сверточную нейронную сеть, с большим отрывом победившую на соревновании ImageNet. AlexNet использовала блоки линейной ректификации (ReLU) в качестве функций активации, технику Dropout для предотвращения переобучения и вычислительные возможности графических процессоров NVIDIA для ускорения обучения.</p>
-
-                            <p>Дальше глубина сетей росла, но рост параметров сдерживали архитектурные идеи: остаточные связи (ResNet) устранили затухание градиентов, “бутылочные горлышки” и 1×1-свёртки уменьшали вычисления без потери качества, а нормализация и регуляризация стабилизировали обучение. В итоге стали доступны сети на сотни слоёв, но их можно было обучать надёжно и быстрее.</p>
-                        </section>
-
-                        <!-- Основные компоненты -->
-                        <section id="section4" class="article-section">
-                            <h2>Основные компоненты нейронных сетей</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Слои, функции активации, нормализация, регуляризация.</li>
-    <li>Оптимизаторы (SGD/Adam) управляют шагами обучения.</li>
-    <li>Даталоадеры, батчи и эпохи определяют рабочий цикл.</li>
-  </ul>
-</div>
-                            <p>Любая нейронная сеть состоит из нескольких ключевых компонентов, каждый из которых выполняет определенную функцию в процессе обработки информации.</p>
-
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-layer-group"></i>
-                                    </div>
-                                    <h4>Слои нейронов</h4>
-                                    <p>Основные строительные блоки, организованные в входные, скрытые и выходные слои</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-project-diagram"></i>
-                                    </div>
-                                    <h4>Функции активации</h4>
-                                    <p>Определяют выходное значение нейрона на основе взвешенной суммы входов</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-cogs"></i>
-                                    </div>
-                                    <h4>Алгоритмы обучения</h4>
-                                    <p>Методы оптимизации весовых коэффициентов для минимизации ошибки</p>
-                                </div>
-                            </div>
-
-                            <h3>Структурная организация нейросетей</h3>
-                            <p>Типичная нейронная сеть организована в виде слоистой структуры, включающей входной слой, один или несколько скрытых слоев и выходной слой. Входной слой принимает исходные данные и передает их в скрытые слои, где происходит основная обработка и извлечение признаков. Выходной слой генерирует финальные предсказания или классификации на основе обработанной информации.</p>
-
-                            <p>Скрытые слои являются ключевым элементом, определяющим вычислительную мощь нейронной сети. Каждый скрытый слой извлекает различные признаки из входных данных — от простых (края, углы) на начальных слоях до сложных абстрактных концепций (объекты, лица) на глубоких слоях. Количество скрытых слоев потенциально неограничено и зависит от сложности решаемой задачи и архитектурных особенностей сети.</p>
-
-                            <h3>Функции активации</h3>
-                            <p>Функции активации обеспечивают нелинейность нейронных сетей, позволяя им моделировать сложные зависимости в данных. Среди наиболее распространенных функций активации выделяются:</p>
-
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-chart-line"></i>
-                                    </div>
-                                    <h4>Сигмоидная функция</h4>
-                                    <p>Преобразует вход в диапазон (0,1) и исторически применялась в скрытых слоях; сейчас чаще используют её на выходе бинарных моделей (вероятность класса). Минусы в глубоких сетях — “насыщение”: при больших |x| градиент становится близким к нулю, из-за чего обучение замедляется.</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-wave-square"></i>
-                                    </div>
-                                    <h4>Гиперболический тангенс</h4>
-                                    <p>Диапазон (−1,1) и центрирование вокруг нуля помогают оптимизации (градиенты более сбалансированы). Как и сигмоида, может “насыщаться” на больших |x|, что ослабляет градиенты. В рекуррентных сетях tanh часто выступает как “мягкая” нелинейность внутри ячеек.</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-bolt"></i>
-                                    </div>
-                                    <h4>ReLU</h4>
-                                    <p>Простая и быстрая нелинейность: пропускает только положительные значения. Почти не страдает от затухающего градиента на положительной полуплоскости, ускоряет обучение и делает активации разрежёнными. Из минусов — “мертвые” нейроны (если входы часто < 0, градиент там не течёт). Варианты: LeakyReLU/ELU/GELU — смягчают этот эффект.</p>
-                                </div>
-                            </div>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/2.1.png" alt="Функции активации">
-                                <p class="image-caption">Рис. 2. Сравнение функций активации</p>
-                            </div>
-
-                            <h3>Механизмы регуляризации</h3>
-                            <p>Для предотвращения переобучения нейронных сетей применяются различные методы регуляризации. Техника Dropout, впервые использованная в AlexNet, случайным образом отключает определенную долю нейронов на каждой итерации обучения, заставляя сеть развивать более устойчивые признаки.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/5.1.png" alt="Dropout">
-                                <p class="image-caption">Рис. 3. Механизм Dropout</p>
-                            </div>
-
-                            <p>Пакетная нормализация (Batch Normalization) нормализует активации в каждом слое, вычисляя среднее и стандартное отклонение по мини-батчу и масштабируя значения. Это ускоряет обучение и позволяет использовать более высокие скорости обучения, поскольку последующие слои не испытывают необходимости адаптироваться к постоянно изменяющемуся распределению входных данных.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/6.1.png" alt="Пакетная нормализация">
-                                <p class="image-caption">Рис. 4. Пакетная нормализация</p>
-                            </div>
-                        </section>
-
-                        <!-- Типы архитектур -->
-                        <section id="section5" class="article-section">
-                            <h2>Типы архитектур нейронных сетей</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>CNN — для изображений, извлекают локальные признаки свертками.</li>
-    <li>RNN — для последовательностей, учитывают контекст во времени.</li>
-    <li>Трансформеры — вниманием связывают элементы без рекурсии.</li>
-  </ul>
-</div>
-                            <h3>Полносвязные нейронные сети (FNN)</h3>
-                            <p>Полносвязные нейронные сети прямого распространения (Fully Connected Feed-Forward Neural Networks) представляют собой классическую архитектуру, где каждый нейрон одного слоя связан со всеми нейронами предыдущего и последующего слоев. Многослойный перцептрон является типичным примером такой архитектуры и успешно применяется для задач классификации.</p>
-
-                            <p>Однако FNN обладают двумя существенными ограничениями. Во-первых, они требуют огромного количества параметров для обработки высокоразмерных данных — трехслойная сеть для обработки изображений 100×100 пикселей содержит порядка миллиона параметров, что требует обширных обучающих выборок. Во-вторых, глубокие полносвязные сети страдают от проблемы затухающего градиента, когда градиент ошибки становится экспоненциально малым при обратном распространении через множество слоев, затрудняя обучение весов на начальных слоях.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/7.1.jpg" alt="Полносвязная нейронная сеть">
-                                <p class="image-caption">Рис. 5. Полносвязная нейронная сеть</p>
-                            </div>
-
-                            <p>Интересной вариацией FNN являются автоэнкодеры — архитектуры с узким "бутылочным горлышком" в середине сети. Автоэнкодер обучается восстанавливать входные данные на выходе, проходя через сжатое представление. Узкий слой вынуждает сеть изучать наиболее информативные признаки данных, эффективно выполняя сжатие и извлечение латентных представлений.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/8.1.png" alt="Автоэнкодер">
-                                <p class="image-caption">Рис. 6. Архитектура автоэнкодера</p>
-                            </div>
-                        </section>
-
-                        <!-- Сверточные нейронные сети -->
-                        <section id="section6" class="article-section">
-                            <h2>Сверточные нейронные сети (CNN)</h2>
-                            <h2>Сверточные нейронные сети (CNN)</h2>
-<div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Свертка выявляет шаблоны (края, текстуры) в окрестностях.</li>
-    <li>Pooling снижает размерность, сохраняя важные признаки.</li>
-    <li>Каналы и глубина увеличивают выразительность.</li>
-  </ul>
-</div>
-                            <p>Сверточные нейронные сети представляют собой специализированную архитектуру, оптимизированную для обработки данных с пространственной структурой, особенно изображений. CNN решают три основные задачи: классификацию (определение класса объекта), детекцию (локализация объектов с помощью ограничивающих рамок) и сегментацию (попиксельная классификация).</p>
-
-                            <p>Сверточные слои являются ключевым компонентом CNN. Свертка — это “лупа-детектор”: маленькое ядро K по очереди прикладывают к каждому фрагменту изображения I. В результате получается карта откликов: где ядро “узнало” нужный паттерн (край, угол, текстуру), там значения высокие. Несколько разных ядер извлекают разные признаки; на следующих слоях сеть комбинирует их в более сложные объекты. Формально двумерная свёртка: (I∗K)(i,j)=∑ₘ∑ₙ I(i+m,j+n)K(m,n), где I — вход, K — ядро.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/9.1.png" alt="Сверточный слой">
-                                <p class="image-caption">Рис. 7. Принцип работы сверточного слоя</p>
-                            </div>
-
-                            <p>Каждый сверточный слой содержит множество обучаемых фильтров, каждый из которых извлекает определенные признаки. Ранние слои детектируют простые признаки (края, углы, градиенты), средние слои комбинируют их в более сложные паттерны (текстуры, части объектов), а глубокие слои распознают целостные объекты высокого уровня.</p>
-
-                            <h3>Слои субдискретизации (Pooling)</h3>
-                            <p>Слои субдискретизации (Pooling) уменьшают пространственную размерность карт признаков, обеспечивая инвариантность к небольшим трансляциям и снижая вычислительную нагрузку. Max pooling выбирает максимальное значение из локальной области, сохраняя наиболее сильные активации. Average pooling вычисляет среднее значение, что обеспечивает более плавное представление.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/10.1.png" alt="Pooling">
-                                <p class="image-caption">Рис. 8. Операция Max Pooling</p>
-                            </div>
-
-                            <h3>Современные архитектуры CNN</h3>
-                            <p>VGGNet, разработанные в Оксфорде, впервые систематически применили малые фильтры 3×3, организованные в последовательные свертки. Ключевое открытие заключалось в том, что две свертки 3×3 эквивалентны одной свертке 5×5, а три — одной 7×7, но с меньшим количеством параметров и дополнительной нелинейностью.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/11.1.jpg" alt="VGGNet">
-                                <p class="image-caption">Рис. 9. Архитектура VGGNet</p>
-                            </div>
-
-                            <p>GoogLeNet представила концепцию Inception-модулей — параллельных ветвей с фильтрами разных размеров (1×1, 3×3, 5×5), выходы которых конкатенируются. Критическим нововведением стало использование bottleneck-слоев — сверток 1×1, уменьшающих количество каналов перед "дорогими" вычислениями. Это снизило вычислительную сложность примерно в 10 раз без потери точности.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/12.1.png" alt="Inception модуль">
-                                <p class="image-caption">Рис. 10. Inception модуль в GoogLeNet</p>
-                            </div>
-
-                            <p>ResNet произвела революцию в глубоком обучении, введя концепцию остаточных связей (skip connections). Вместо обучения прямого отображения H(x), ResNet обучает остаточное отображение F(x)=H(x)−x, где исходный вход x добавляется к выходу блока: H(x)=F(x)+x. Это решило проблему затухающего градиента и позволило обучать сети из сотен и даже тысяч слоев.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/13.1.png" alt="ResNet">
-                                <p class="image-caption">Рис. 11. Остаточный блок в ResNet</p>
-                            </div>
-                        </section>
-
-                        <!-- Рекуррентные нейронные сети -->
-                        <section id="section7" class="article-section">
-                            <h2>Рекуррентные нейронные сети (RNN)</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Состояние h_t накапливает контекст прошлых шагов.</li>
-    <li>LSTM/GRU решают затухание/взрыв градиента.</li>
-    <li>Применение: текст, звук, временные ряды.</li>
-  </ul>
-</div>
-                            <p>Базовая RNN на шаге t получает вход xₜ и предыдущее скрытое состояние hₜ₋₁:
-hₜ = tanh(Wₕₓ xₜ + Wₕₕ hₜ₋₁ + bₕ),
-yₜ = Wᵧₕ hₜ + bᵧ.
-Здесь hₜ — “краткая память” о прошлых шагах. Проблема классической RNN — затухающие/взрывающиеся градиенты на длинных последовательностях.
-
-LSTM решает это с помощью “вентилируемой” памяти cₜ:
-iₜ = σ(Wᵢ[xₜ; hₜ₋₁] + bᵢ) — входной вентиль (что записать),
-fₜ = σ(W𝒻[xₜ; hₜ₋₁] + b𝒻) — вентиль забывания (что сохранить),
-oₜ = σ(Wₒ[xₜ; hₜ₋₁] + bₒ) — выходной вентиль (что показать наружу),
-ĝₜ = tanh(Wg[xₜ; hₜ₋₁] + bg) — кандидат в память,
-cₜ = fₜ ⊙ cₜ₋₁ + iₜ ⊙ ĝₜ,
-hₜ = oₜ ⊙ tanh(cₜ).
-Благодаря cₜ информация может “течь” сквозь много шагов почти без потерь.
-
-GRU упрощает идею (без отдельного cₜ):
-zₜ = σ(Wz[xₜ; hₜ₋₁]) — обновление (сколько взять из прошлого),
-rₜ = σ(Wr[xₜ; hₜ₋₁]) — сброс (сколько “забыть”),
-ĥₜ = tanh(W[xₜ; (rₜ ⊙ hₜ₋₁)]),
-hₜ = (1 − zₜ) ⊙ hₜ₋₁ + zₜ ⊙ ĥₜ.
-На практике GRU чуть проще и часто не хуже LSTM. Выбор зависит от данных и скорости/точности.</p>
-
-                            <p>Математически работу базовой RNN можно описать уравнениями:</p>
-                            <div class="code-block block-code">
-                                <div class="code-header">
-                                    <span>Уравнения RNN</span>
-                                    <button class="copy-code">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                      
-                                <div class="math-block">h<sub>t</sub> = tanh( W<sub>hh</sub> · h<sub>t−1</sub> + W<sub>xh</sub> · x<sub>t</sub> + b<sub>h</sub> )</div>
-                                <div class="math-block">y<sub>t</sub> = W<sub>hy</sub> · h<sub>t</sub> + b<sub>y</sub></div>
-                                
-                            </div>
-                            
-                            <p>где hₜ — скрытое состояние в момент t, xₜ — входной вектор, yₜ — выходной вектор.</p>
-                            <div class="formula-explainer">
-  <strong>Идея:</strong> скрытое состояние h_t комбинирует новый вход x_t и прошлое h_{t-1}. Так модель «помнит» контекст. Выход y_t вычисляется из текущего состояния.
-</div>
-                            <p>Классические RNN страдают от проблем затухающего и взрывающегося градиента при обработке длинных последовательностей. LSTM (Long Short-Term Memory) решают эту проблему, вводя сложную ячейку памяти с управляющими вентилями. LSTM содержит три типа вентилей: входной (input gate), забывающий (forget gate) и выходной (output gate), которые регулируют поток информации через ячейку.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/14.1.jpg" alt="LSTM">
-                                <p class="image-caption">Рис. 12. Архитектура LSTM</p>
-                            </div>
-
-                            <p>GRU (Gated Recurrent Units) представляют собой упрощенную версию LSTM с двумя вентилями (reset и update), обеспечивающую сопоставимую производительность при меньших вычислительных затратах.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/15.1.jpg" alt="GRU">
-                                <p class="image-caption">Рис. 13. Архитектура GRU</p>
-                            </div>
-
-                            <p>Двунаправленные RNN (Bidirectional RNN) обрабатывают последовательность в обоих направлениях — вперед и назад — что позволяет учитывать как предшествующий, так и последующий контекст для каждого элемента. Это особенно важно для задач, где вся последовательность доступна заранее, например, при анализе предложений.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/16.1.png" alt="Двунаправленная RNN">
-                                <p class="image-caption">Рис. 14. Двунаправленная RNN</p>
-                            </div>
-                        </section>
-
-                        <!-- Трансформеры -->
-                        <section id="section8" class="article-section">
-                            <h2>Трансформеры</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Attention взвешивает важные элементы последовательности.</li>
-    <li>Многоголовое внимание учит разные «взгляды» на данные.</li>
-    <li>Позиционное кодирование добавляет порядок.</li>
-  </ul>
-</div>
-                            <p>Архитектура трансформеров, представленная в статье "Attention is All You Need" в 2017 году, произвела революцию в обработке последовательностей. Трансформеры полностью отказались от рекуррентности, основываясь исключительно на механизме внимания (attention mechanism).</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/17.1.jpg" alt="Трансформер">
-                                <p class="image-caption">Рис. 15. Архитектура трансформера</p>
-                            </div>
-
-                            <p>Механизм внимания позволяет модели динамически фокусироваться на различных частях входной последовательности при генерации каждого элемента выхода. Scaled Dot-Product Attention вычисляется как:</p>
-
-                            <div class="code-block block-code">
-                                <div class="code-header">
-                                    <span>Механизм внимания</span>
-                                    <button class="copy-code">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                                <div class="math-block">Attention(Q, K, V) = softmax( <span class="frac"><span class="num">QK<sup>T</sup></span><span class="bar"></span><span class="den">√d<sub>k</sub></span></span> ) · V</div>
-                            </div>
-                            <p>где Q (queries), K (keys) и V (values) — это линейные проекции входных данных, а dₖ — размерность ключей.</p>
-                            <div class="formula-explainer">
-  <strong>Идея:</strong> считаем похожесть запроса Q к каждому ключу K, нормируем (softmax), получаем веса внимания и усредняем значения V с этими весами. Модель фокусируется на «важных» местах.
-</div>
-                            <p>Multi-head attention использует несколько параллельных механизмов внимания ("голов"), каждый из которых обучается фокусироваться на различных аспектах входных данных. Результаты всех голов конкатенируются и проецируются: MultiHead(Q,K,V)=Concat(head₁,...,headₕ)Wᴼ.</p>
-
-                            <p>Трансформеры состоят из энкодера и декодера, каждый из которых содержит стек из нескольких идентичных слоев. Энкодер преобразует входную последовательность в набор непрерывных представлений, которые декодер использует для генерации выходной последовательности. Ключевым преимуществом является возможность параллельной обработки всех элементов последовательности, что значительно ускоряет обучение по сравнению с RNN.</p>
-
-                            <p>Позиционное кодирование добавляется к входным эмбеддингам для внесения информации о позиции элементов в последовательности, поскольку механизм внимания сам по себе не учитывает порядок элементов. Используются синусоидальные функции разных частот или обучаемые позиционные эмбеддинги.</p>
-
-                            <p>Трансформеры стали основой для революционных моделей, таких как BERT (Bidirectional Encoder Representations from Transformers) для понимания языка и GPT (Generative Pre-trained Transformer) для генерации текста.</p>
-                        </section>
-
-                        <!-- Генеративные модели -->
-                        <section id="section9" class="article-section">
-                            <h2>Генеративные модели</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>VAE: учат латентное представление и восстанавливают вход.</li>
-    <li>GAN: игра двух сетей — генератора и дискриминатора.</li>
-    <li>Diffusion: пошаговое «очищение» шума к данным.</li>
-  </ul>
-</div>
-                            <h3>Генеративно-состязательные сети (GAN)</h3>
-                            <p>Генеративно-состязательные сети, предложенные Яном Гудфеллоу в 2014 году, состоят из двух конкурирующих нейронных сетей: генератора и дискриминатора. Генератор создает синтетические данные из случайного шума, пытаясь обмануть дискриминатора. Дискриминатор обучается различать реальные данные от сгенерированных.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/18.1.jpg" alt="GAN">
-                                <p class="image-caption">Рис. 16. Архитектура GAN</p>
-                            </div>
-
-                            <p>Обучение формализуется как минимаксная игра:</p>
-                            <div class="code-block block-code">
-                                <div class="code-header">
-                                    <span>Минимаксная игра GAN</span>
-                                    <button class="copy-code">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                                <div class="math-block">min<sub>G</sub> max<sub>D</sub> E<sub>x~p<sub>data</sub></sub>[log D(x)] + E<sub>z~p<sub>z</sub></sub>[log(1 − D(G(z)))]</div>
-                            </div>
-                            <p>где G — генератор, D — дискриминатор, x — реальные данные, z — случайный вектор.</p>
-                            <div class="formula-explainer">
-  <strong>Идея:</strong> дискриминатор учится отличать реальные данные от сгенерированных, а генератор — обманывать дискриминатор. Игра «кто кого» ведёт к реалистичным образцам.
-</div>
-                            <p>StyleGAN усовершенствовала архитектуру GAN, вводя управление стилем генерируемых изображений на различных уровнях детализации. Progressive GAN постепенно увеличивает разрешение генерируемых изображений от низкого к высокому, что стабилизирует обучение и улучшает качество.</p>
-
-                            <h3>Вариационные автоэнкодеры (VAE)</h3>
-                            <p>Вариационные автоэнкодеры представляют собой вероятностную генеративную модель, комбинирующую идеи автоэнкодеров с вариационным выводом. VAE кодирует входные данные не в фиксированную точку латентного пространства, а в распределение (обычно гауссовское), характеризуемое средним μ и стандартным отклонением σ.</p>
-
-                            <div class="article-image">
-                                <img src="./Обзоры ИИ/Изображения/Статьи/1/19.1.png" alt="VAE">
-                                <p class="image-caption">Рис. 17. Архитектура VAE</p>
-                            </div>
-
-                            <p>Функция потерь VAE состоит из двух компонентов: ошибки реконструкции и регуляризатора в виде KL-дивергенции между кодируемым распределением и стандартным нормальным распределением:</p>
-                            <div class="code-block block-code">
-                                <div class="code-header">
-                                    <span>Функция потерь VAE</span>
-                                    <button class="copy-code">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                                <div class="math-block">L = E<sub>z~q(z|x)</sub>[log p(x|z)] − D<sub>KL</sub>(q(z|x) || p(z))</div>
-                            </div>
-                            <p>где первый член обеспечивает качество реконструкции, а второй делает латентное пространство непрерывным и пригодным для генерации.</p>
-                            <div class="formula-explainer">
-  <strong>Идея:</strong> первая часть — насколько хорошо мы восстанавливаем x из скрытой переменной z; вторая (KL) — аккуратная регуляризация латентного пространства, чтобы оно было «ровным» и осмысленным.
-</div>
-                            <p>VAE создают более структурированное и интерпретируемое латентное пространство по сравнению с GAN, но часто генерируют менее четкие изображения. Conditional VAE расширяют базовую модель, позволяя контролировать процесс генерации через дополнительную входную информацию (метки классов, атрибуты).</p>
-                        </section>
-
-                        <!-- Методологии машинного обучения -->
-                        <section id="section10" class="article-section">
-                            <h2>Методологии машинного обучения</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Разделяйте валидацию/тест, чтобы избегать переобучения.</li>
-    <li>Регуляризация и ранняя остановка улучшают обобщение.</li>
-    <li>Логи/метрики и репродуцируемость — must-have.</li>
-  </ul>
-</div>
-                            <h3>Парадигмы обучения нейронных сетей</h3>
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-chalkboard-teacher"></i>
-                                    </div>
-                                    <h4>Обучение с учителем</h4>
-                                    <p>Модель обучается на размеченных данных, содержащих пары входов и соответствующих правильных выходов</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-search"></i>
-                                    </div>
-                                    <h4>Обучение без учителя</h4>
-                                    <p>Работает с неразмеченными данными, выявляя скрытые структуры и закономерности</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-robot"></i>
-                                    </div>
-                                    <h4>Обучение с подкреплением</h4>
-                                    <p>Обучает агента принимать последовательность решений для максимизации кумулятивной награды</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-balance-scale"></i>
-                                    </div>
-                                    <h4>Полу- и самообучение</h4>
-                                    <p>Комбинируют небольшое количество размеченных данных с большим объемом неразмеченных</p>
-                                </div>
-                            </div>
-
-                            <h3>Метрики оценки качества моделей</h3>
-                            <p>Для оценки качества моделей машинного обучения используются различные метрики в зависимости от типа задачи:</p>
-
-                            <div class="metrics-table">
-                                <div class="metric-row">
-                                    <div class="metric-name">Точность (Accuracy)</div>
-                                    <div class="metric-description">Доля правильных предсказаний среди всех сделанных</div>
-                                </div>
-                                <div class="metric-row">
-                                    <div class="metric-name">Precision и Recall</div>
-                                    <div class="metric-description">Метрики для задач классификации с несбалансированными классами</div>
-                                </div>
-                                <div class="metric-row">
-                                    <div class="metric-name">F1-мера</div>
-                                    <div class="metric-description">Гармоническое среднее между precision и recall</div>
-                                </div>
-                                <div class="metric-row">
-                                    <div class="metric-name">Перекрестная энтропия</div>
-                                    <div class="metric-description">Метрика для задач классификации с вероятностным выходом</div>
-                                </div>
-                                <div class="metric-row">
-                                    <div class="metric-name">Среднеквадратичная ошибка</div>
-                                    <div class="metric-description">Основная метрика для задач регрессии</div>
-                                </div>
-                            </div>
-
-                            <h3>Техники валидации моделей</h3>
-                            <p>Для надежной оценки обобщающей способности моделей используются различные техники валидации:</p>
-
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-random"></i>
-                                    </div>
-                                    <h4>Разделение на обучающую и тестовую выборки</h4>
-                                    <p>Стандартный подход с разделением данных на обучающую и тестовую части</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-layer-group"></i>
-                                    </div>
-                                    <h4>K-кратная перекрестная валидация</h4>
-                                    <p>Данные разбиваются на K частей, модель обучается K раз на разных комбинациях</p>
-                                </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">
-                                        <i class="fas fa-clock"></i>
-                                    </div>
-                                    <h4>Временные разделения</h4>
-                                    <p>Для временных рядов данные разделяются по времени для предотвращения утечки информации</p>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- Практические применения -->
-                        <section id="section11" class="article-section">
-                            <h2>Практические применения нейронных сетей</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Компьютерное зрение: классификация, детекция, сегментация.</li>
-    <li>NLP: перевод, суммаризация, чат-ассистенты.</li>
-    <li>Рекомендации, прогнозы, аномалии — в продакшне.</li>
-  </ul>
-</div>
-                            <h3>Компьютерное зрение</h3>
-                            <div class="applications-grid">
-                                <div class="application-card" data-app="app-vision">
-                                    <div class="app-icon">
-                                        <i class="fas fa-camera"></i>
-                                    </div>
-                                    <h4>Распознавание объектов</h4>
-                                    <p>Автоматическое обнаружение и классификация объектов на изображениях</p>
-                                </div>
-                                <div class="application-card" data-app="app-healthcare">
-                                    <div class="app-icon">
-                                        <i class="fas fa-user-md"></i>
-                                    </div>
-                                    <h4>Медицинская диагностика</h4>
-                                    <p>Анализ медицинских изображений для выявления патологий</p>
-                                </div>
-                                <div class="application-card" data-app="app-autonomous">
-                                    <div class="app-icon">
-                                        <i class="fas fa-car"></i>
-                                    </div>
-                                    <h4>Автономные транспортные средства</h4>
-                                    <p>Распознавание дорожных знаков, пешеходов и препятствий</p>
-                                </div>
-                                <div class="application-card" data-app="app-biometrics">
-                                    <div class="app-icon">
-                                        <i class="fas fa-fingerprint"></i>
-                                    </div>
-                                    <h4>Биометрия</h4>
-                                    <p>Распознавание лиц и других биометрических характеристик</p>
-                                </div>
-                            </div>
-
-                            <h3>Обработка естественного языка</h3>
-                            <div class="applications-grid">
-                                <div class="application-card" data-app="app-translation">
-                                    <div class="app-icon">
-                                        <i class="fas fa-language"></i>
-                                    </div>
-                                    <h4>Машинный перевод</h4>
-                                    <p>Автоматический перевод текстов между языками</p>
-                                </div>
-                                <div class="application-card" data-app="app-chatbots">
-                                    <div class="app-icon">
-                                        <i class="fas fa-comment-dots"></i>
-                                    </div>
-                                    <h4>Чат-боты и виртуальные ассистенты</h4>
-                                    <p>Интеллектуальные системы для взаимодействия с пользователями</p>
-                                </div>
-                                <div class="application-card" data-app="app-doc-analysis">
-                                    <div class="app-icon">
-                                        <i class="fas fa-file-alt"></i>
-                                    </div>
-                                    <h4>Анализ тональности</h4>
-                                    <p>Определение эмоциональной окраски текстов</p>
-                                </div>
-                                <div class="application-card" data-app="app-search">
-                                    <div class="app-icon">
-                                        <i class="fas fa-search"></i>
-                                    </div>
-                                    <h4>Извлечение информации</h4>
-                                    <p>Автоматическое извлечение структурированной информации из текстов</p>
-                                </div>
-                            </div>
-
-                            <h3>Обработка сигналов</h3>
-                            <div class="applications-grid">
-                                <div class="application-card" data-app="app-speech">
-                                    <div class="app-icon">
-                                        <i class="fas fa-microphone"></i>
-                                    </div>
-                                    <h4>Распознавание речи</h4>
-                                    <p>Преобразование речи в текст</p>
-                                </div>
-                                <div class="application-card" data-app="app-music">
-                                    <div class="app-icon">
-                                        <i class="fas fa-music"></i>
-                                    </div>
-                                    <h4>Анализ аудио</h4>
-                                    <p>Классификация музыкальных жанров, идентификация исполнителей</p>
-                                </div>
-                                <div class="application-card" data-app="app-signals">
-                                    <div class="app-icon">
-                                        <i class="fas fa-wave-square"></i>
-                                    </div>
-                                    <h4>Синтез речи</h4>
-                                    <p>Генерация естественно звучащей речи из текста</p>
-                                </div>
-                                <div class="application-card" data-app="app-patient-monitoring">
-                                    <div class="app-icon">
-                                        <i class="fas fa-heartbeat"></i>
-                                    </div>
-                                    <h4>Биомедицинские сигналы</h4>
-                                    <p>Анализ ЭКГ, ЭЭГ и других медицинских сигналов</p>
-                                </div>
-                            </div>
-
-                            <h3>Рекомендательные системы</h3>
-                            <p>Нейронные сети широко используются для построения рекомендательных систем, которые предсказывают предпочтения пользователей на основе их истории взаимодействий и поведения. Современные подходы используют гибридные архитектуры, комбинирующие коллаборативную фильтрацию с глубоким обучением для учета сложных нелинейных зависимостей.</p>
-
-                            <h3>Автоматическое проектирование нейронных сетей (NAS)</h3>
-                            <p>Автоматическое проектирование нейронных сетей (Neural Architecture Search) представляет собой область, где нейронные сети используются для проектирования других нейронных сетей. NAS автоматизирует процесс поиска оптимальной архитектуры для конкретной задачи, что значительно сокращает время разработки и часто приводит к созданию более эффективных моделей.</p>
-                        </section>
-
-                        <!-- Современные тренды -->
-                        <section id="section12" class="article-section">
-                            <h2>Современные тренды и перспективы развития</h2>
-                            <div class="section-summary">
-  <strong>Коротко по разделу:</strong>
-  <ul>
-    <li>Мультимодальность: текст+изображение+аудио.</li>
-    <li>Эффективность: квантование, сжатие, мало-вычислительное дообучение.</li>
-    <li>Безопасность и интерпретируемость — ключевые направления.</li>
-  </ul>
-</div>
-                            <h3>Эффективность и оптимизация</h3>
-                            <p>Одним из ключевых направлений развития является повышение эффективности нейронных сетей. Квантование (quantization) позволяет уменьшить точность представления весов и активаций с 32-битных чисел с плавающей точкой до 8-битных целых чисел, что значительно сокращает требования к памяти и вычислительной мощности без существенной потери точности.</p>
-
-                            <p>Прунинг (pruning) удаляет избыточные веса и нейроны, создавая разреженные сети с меньшим количеством параметров. Дистилляция знаний (knowledge distillation) позволяет обучать компактные "студенческие" модели, имитирующие поведение больших "учительских" моделей.</p>
-
-                            <h3>Мультимодальное обучение</h3>
-                            <p>Мультимодальное обучение объединяет информацию из различных источников (текст, изображения, аудио) для создания более полных представлений. Современные модели, такие как CLIP (Contrastive Language-Image Pre-training), обучаются на парах изображение-текст и демонстрируют способность к нулевому обучению (zero-shot learning) — решению задач без явного обучения на них.</p>
-
-                            <h3>Нейроморфные вычисления</h3>
-                            <p>Нейроморфные вычисления представляют собой подход к проектированию аппаратного обеспечения, имитирующего структуру и функционирование биологических нейронных систем. Нейроморфные чипы, такие как Loihi от Intel и TrueNorth от IBM, обещают значительное повышение энергоэффективности для задач нейросетевых вычислений.</p>
-
-                            <h3>Объяснимый ИИ (XAI)</h3>
-                            <p>С ростом сложности нейронных сетей возрастает потребность в объяснимости их решений. Методы объяснимого ИИ (Explainable AI) направлены на создание прозрачных моделей и интерпретацию решений черных ящиков. Техники, такие как LIME (Local Interpretable Model-agnostic Explanations) и SHAP (SHapley Additive exPlanations), позволяют понять, какие входные признаки наиболее важны для конкретного предсказания.</p>
-
-                            <h3>Федеративное обучение</h3>
-                            <p>Федеративное обучение позволяет обучать модели на распределенных данных без их централизации. Модель обучается локально на устройствах пользователей, после чего только обновления параметров отправляются на сервер для агрегации. Это обеспечивает сохранение конфиденциальности данных и снижает требования к пропускной способности сети.</p>
-                        </section>
-
-                        <!-- Методологические вызовы -->
-                        <section id="section13" class="article-section">
-                            <h2>Методологические вызовы и ограничения</h2>
-                            
-                            <h3>Этические аспекты</h3>
-                            <p>Развитие нейросетевых технологий сопровождается серьезными этическими вызовами. Смещение данных (data bias) может приводить к дискриминационным предсказаниям, когда модель воспроизводит и усиливает социальные предрассудки, присутствующие в обучающих данных. Проблема "черного ящика" затрудняет понимание и объяснение решений сложных моделей, что критически важно в таких областях, как медицина и юриспруденция.</p>
-
-                            <h3>Технические ограничения</h3>
-                            <p>Нейронные сети требуют огромных объемов данных для обучения, что ограничивает их применение в областях с недостаточной доступностью данных. Высокие вычислительные требования делают обучение сложных моделей дорогостоящим и энергозатратным процессом. Уязвимость к состязательным атакам (adversarial attacks) — небольшим, специально созданным возмущениям входных данных, которые могут кардинально изменить предсказание модели — представляет серьезную угрозу для систем безопасности.</p>
-
-                            <h3>Проблема обобщения</h3>
-                            <p>Нейронные сети часто демонстрируют отличные результаты на данных, распределенных аналогично обучающей выборке, но могут значительно терять в точности при столкновении с данными из другого распределения. Проблема переноса знаний между доменами (domain adaptation) и устойчивости к изменениям в данных остается актуальной областью исследований.</p>
-
-                            <h3>Экологический след</h3>
-                            <p>Обучение больших нейронных сетей связано со значительным потреблением энергии. Например, обучение модели GPT-3 оценивается в сотни мегаватт-часов электроэнергии, что сопоставимо с годовым потреблением десятков домохозяйств. Разработка более энергоэффективных алгоритмов и архитектур является важным направлением для устойчивого развития области.</p>
-                        </section>
-
-                        <!-- Заключение -->
-                        <section id="section14" class="article-section">
-                            <h2>Заключение</h2>
-                            <p>Архитектурные принципы нейросетевых систем и методологии машинного обучения представляют собой динамично развивающуюся область, находящуюся на стыке компьютерных наук, математики и нейробиологии. От простых перцептронов до современных трансформеров и генеративных моделей, нейронные сети прошли впечатляющий путь эволюции, демонстрируя беспрецедентные возможности в решении сложных задач.</p>
-
-                            <p>Современные архитектуры, такие как сверточные сети, рекуррентные сети с механизмами памяти и трансформеры, обеспечивают мощные инструменты для обработки различных типов данных. Методологии обучения, включая обучение с учителем, без учителя и с подкреплением, позволяют эффективно настраивать модели для решения конкретных практических задач.</p>
-
-                            <p>Однако развитие нейросетевых технологий сопровождается серьезными вызовами, включая этические вопросы, технические ограничения и экологические последствия. Будущие исследования будут сосредоточены на создании более эффективных, объяснимых и устойчивых систем, способных к обобщению знаний и адаптации к изменяющимся условиям.</p>
-
-                            <p>Нейронные сети продолжают трансформировать подходы к решению сложных задач в самых разных областях — от компьютерного зрения и обработки естественного языка до научных исследований и творческих приложений. Понимание архитектурных принципов и методологий машинного обучения становится все более важным для исследователей, инженеров и всех, кто стремится использовать потенциал искусственного интеллекта для решения реальных проблем.</p>
-                        </section>
-
-                        <section id="cheatsheet" class="article-section cheatsheet">
-  <h2>Шпаргалка, повтори за минуту</h2>
-  <ul class="cheatsheet-list">
-    <li><strong>Нейрон:</strong> суммирует взвешенные входы + смещение → нелинейность.</li>
-    <li><strong>Потери:</strong> измеряют расхождение предсказаний с целями.</li>
-    <li><strong>Градиентный спуск:</strong> обновляет веса навстречу уменьшению потерь.</li>
-    <li><strong>Регуляризация:</strong> L2/L1, Dropout, ранняя остановка против переобучения.</li>
-    <li><strong>CNN:</strong> свертки для локальных признаков, pooling для сжатия.</li>
-    <li><strong>RNN:</strong> состояние h_t помнит контекст последовательности (LSTM/GRU).</li>
-    <li><strong>Attention:</strong> фокус на важных элементах; основа трансформеров.</li>
-    <li><strong>GAN:</strong> генератор соревнуется с дискриминатором → реалистичные выборки.</li>
-    <li><strong>VAE:</strong> реконструкция + KL-регуляризация латентного пространства.</li>
-    <li><strong>Практика:</strong> разделяй трейн/валидацию/тест, логируй метрики, фиксируй seed.</li>
-  </ul>
-</section>
-
-                    </div>
+      </section>
+      <!-- ======================== ПО ПРОСТОМУ И ПОНЯТНОМУ ======================== -->
+      <section id="simple-summary" class="simple-summary section">
+        <div class="container">
+          <header class="simple-summary__header">
+            <h2 class="simple-summary__title">🧠 По простому и понятному</h2>
+            <p class="simple-summary__subtitle">
+              Краткий и понятный обзор всей статьи: что здесь происходит, зачем
+              это нужно и как применять.
+            </p>
+          </header>
+
+          <div class="simple-summary__content">
+            <!-- Что такое нейросеть -->
+            <section class="summary-block">
+              <h3 id="ss-neuron" class="summary-block__title">
+                🧩 Что такое нейрон и как он работает
+              </h3>
+              <p>
+                <strong>Нейрон</strong> — это крошечный «решатель». Он получает
+                несколько чисел (например, яркости пикселей или параметры
+                звука), каждое число умножает на свою «важность» — <em>вес</em>,
+                складывает всё и решает, сработать или нет. Если сработал —
+                отправляет сигнал дальше. Когда таких нейронов миллионы и они
+                связаны слоями, получается система, которая может
+                <strong>распознавать, понимать и даже создавать</strong>.
+              </p>
+              <p class="hint">
+                💡 <strong>Интуиция:</strong> нижние слои замечают простые штуки
+                (линии, углы), средние — детали (глаза, уши), верхние — целые
+                образы (лицо, «кот», «машина»).
+              </p>
+            </section>
+
+            <!-- Как учится -->
+            <section class="summary-block">
+              <h3 id="ss-learn" class="summary-block__title">
+                🧮 Как нейросеть учится
+              </h3>
+              <ul class="summary-list">
+                <li>
+                  <strong>Функция потерь</strong> — «оценка в журнале»: чем
+                  больше, тем хуже предсказание.
+                </li>
+                <li>
+                  <strong>Градиентный спуск</strong> — способ понять,
+                  <em>в какую сторону крутить веса</em>, чтобы ошибаться меньше.
+                  Представьте гору ошибок: сеть «скатывается» к минимуму.
+                </li>
+                <li>
+                  <strong>Скорость обучения</strong> — размер шага. Слишком
+                  большой — пролетим мимо, слишком маленький — будем учиться
+                  вечность.
+                </li>
+                <li>
+                  <strong>Батчи, эпохи, оптимизаторы</strong> (SGD/Adam) —
+                  технические детали, которые делают обучение устойчивым и
+                  эффективным.
+                </li>
+              </ul>
+              <p class="hint">
+                🎯 Аналогия: как стрелок, который после каждого выстрела немного
+                корректирует прицел, пока не начнёт попадать почти точно в цель.
+              </p>
+            </section>
+
+            <!-- Глубокое обучение -->
+            <section class="summary-block">
+              <h3 id="ss-deep" class="summary-block__title">
+                🧠 Что значит «глубокое» обучение
+              </h3>
+              <p>
+                Сеть называют <strong>глубокой</strong>, если у неё много слоёв.
+                Каждый новый слой извлекает всё более сложные признаки: сначала
+                — линии и цвета, потом — формы и детали, затем — понятия вроде
+                «лицо» или «кошка». <strong>Зачем это нужно?</strong> Чтобы
+                понимать сложные зависимости, которые не описать простой
+                формулой.
+              </p>
+            </section>
+
+            <!-- Типы сетей -->
+            <section class="summary-block">
+              <h3 id="ss-types" class="summary-block__title">
+                🧱 Типы нейросетей и зачем они нужны
+              </h3>
+
+              <div class="summary-grid">
+                <div class="summary-card">
+                  <h4>1) Полносвязные (FNN)</h4>
+                  <p>
+                    Базовые сети, где «каждый с каждым». Хороши для табличных
+                    чисел, прогнозов, классификации.
+                  </p>
+                  <p class="muted">
+                    Минус: плохо масштабируются для картинок/звука — слишком
+                    много связей.
+                  </p>
                 </div>
+
+                <div class="summary-card">
+                  <h4>2) Сверточные (CNN)</h4>
+                  <p>
+                    Идеальны для изображений и видео: ищут
+                    <strong>локальные узоры</strong> (края, текстуры, формы), а
+                    затем собирают их в объекты.
+                  </p>
+                  <p class="muted">
+                    Примеры: распознавание объектов, дефектов, медицинские
+                    снимки.
+                  </p>
+                </div>
+
+                <div class="summary-card">
+                  <h4>3) Рекуррентные (RNN / LSTM / GRU)</h4>
+                  <p>
+                    Умеют <strong>помнить последовательность</strong>. Подходят
+                    для текста, речи, музыки, датчиков.
+                  </p>
+                  <p class="muted">
+                    LSTM/GRU добавляют «вентили» памяти — сеть помнит важное
+                    дольше.
+                  </p>
+                </div>
+
+                <div class="summary-card">
+                  <h4>4) Трансформеры</h4>
+                  <p>
+                    Видят <strong>всю последовательность сразу</strong> и с
+                    помощью <em>внимания (attention)</em> решают, что важнее.
+                  </p>
+                  <p class="muted">
+                    Основа ChatGPT и современных LLM: чтение, анализ, генерация,
+                    перевод, мультимодальность.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Генеративные модели -->
+            <section class="summary-block">
+              <h3 id="ss-generative" class="summary-block__title">
+                🎨 Генеративные модели — когда ИИ творит
+              </h3>
+              <div class="summary-grid">
+                <div class="summary-card">
+                  <h4>VAE</h4>
+                  <p>
+                    Учится <strong>сжимать</strong> данные в компактный смысл
+                    (латент) и <strong>восстанавливать</strong> их обратно.
+                  </p>
+                  <p class="muted">
+                    Даёт «ровное» латентное пространство — удобно управлять
+                    вариациями (например, лиц).
+                  </p>
+                </div>
+                <div class="summary-card">
+                  <h4>GAN</h4>
+                  <p>
+                    Две сети соревнуются: <em>генератор</em> подделывает,
+                    <em>дискриминатор</em> ловит. В итоге — фотореалистичный
+                    контент.
+                  </p>
+                  <p class="muted">
+                    Хороши для изображений/стиля, чувствительны к настройке.
+                  </p>
+                </div>
+                <div class="summary-card">
+                  <h4>Диффузионные</h4>
+                  <p>
+                    «Проявляют» картинку из шума шаг за шагом (как цифровая
+                    фотолаборатория).
+                  </p>
+                  <p class="muted">
+                    Основа DALL·E/Stable Diffusion, хорошо управляются текстом.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Парадигмы обучения -->
+            <section class="summary-block">
+              <h3 id="ss-paradigms" class="summary-block__title">
+                🎓 Как обучают нейросети
+              </h3>
+              <ul class="summary-list">
+                <li>
+                  <strong>С учителем</strong> — есть вход и правильный ответ
+                  («это кошка»).
+                </li>
+                <li>
+                  <strong>Без учителя</strong> — сеть сама ищет закономерности
+                  (кластеризация, автоэнкодеры).
+                </li>
+                <li>
+                  <strong>С подкреплением</strong> — есть награды/штрафы (игры,
+                  робототехника, оптимизация).
+                </li>
+                <li>
+                  <strong>Самообучение</strong> — гибридные схемы: модель учится
+                  на больших неразмеченных данных, дополняя себя подсказками.
+                </li>
+              </ul>
+              <p class="hint">
+                🧭 Смысл: выбрать парадигму под задачу и доступные данные.
+              </p>
+            </section>
+
+            <!-- Из чего состоит -->
+            <section class="summary-block">
+              <h3 id="ss-components" class="summary-block__title">
+                ⚙️ Из чего состоит нейросеть
+              </h3>
+              <div class="summary-grid">
+                <div class="summary-card">
+                  <h4>Слои</h4>
+                  <p>
+                    «Этажи» понимания, где каждый следующий опирается на
+                    предыдущий.
+                  </p>
+                </div>
+                <div class="summary-card">
+                  <h4>Функции активации</h4>
+                  <p>
+                    Решают, когда нейрон «просыпается» (ReLU, GELU, сигмоида,
+                    tanh).
+                  </p>
+                </div>
+                <div class="summary-card">
+                  <h4>Регуляризация</h4>
+                  <p>
+                    Защищает от переобучения (Dropout, L2, ранняя остановка).
+                  </p>
+                </div>
+                <div class="summary-card">
+                  <h4>Нормализация</h4>
+                  <p>Стабилизирует обучение (BatchNorm/LayerNorm).</p>
+                </div>
+                <div class="summary-card">
+                  <h4>Оптимизаторы</h4>
+                  <p>Управляют шагами обучения (SGD, Adam, расписания lr).</p>
+                </div>
+              </div>
+              <p class="hint">
+                🧩 Смысл: эти «кубики» делают обучение устойчивым — сеть
+                <em>обобщает</em>, а не «зубрит».
+              </p>
+            </section>
+
+            <!-- Применения -->
+            <section class="summary-block">
+              <h3 id="ss-apps" class="summary-block__title">
+                🌍 Где это применяется
+              </h3>
+              <ul class="summary-columns">
+                <li>
+                  📸 Компьютерное зрение: объекты, дефекты, дорожные знаки.
+                </li>
+                <li>🩺 Медицина: КТ/МРТ/ЭКГ, подсказки врачу.</li>
+                <li>🚗 Автопилоты: анализ камер/лидара в реальном времени.</li>
+                <li>💬 Ассистенты/чат-боты: диалоги, поиск с RAG, перевод.</li>
+                <li>
+                  🔍 Поиск/рекомендации: релевантность, антиспам, ранжирование.
+                </li>
+                <li>🎨 Контент: изображения, музыка, тексты, видео.</li>
+                <li>📊 Промышленность/финансы: прогнозы, аномалии, риски.</li>
+              </ul>
+            </section>
+
+            <!-- Тренды -->
+            <section class="summary-block">
+              <h3 id="ss-trends" class="summary-block__title">
+                🚀 Современные тренды и куда всё идёт
+              </h3>
+              <ul class="summary-list">
+                <li>
+                  <strong>Мультимодальность</strong>:
+                  текст+изображение+звук+видео в одной модели.
+                </li>
+                <li>
+                  <strong>Эффективность</strong>: квантование, сжатие,
+                  on-device.
+                </li>
+                <li>
+                  <strong>Объяснимость и безопасность</strong>: почему модель
+                  так решила? защита данных и авторских прав.
+                </li>
+                <li>
+                  <strong>Самообучение после релиза</strong>: модели продолжают
+                  улучшаться в эксплуатации.
+                </li>
+              </ul>
+            </section>
+
+            <!-- Главное -->
+            <section class="summary-block">
+              <h3 id="ss-key" class="summary-block__title">
+                💡 Главное, что нужно понять
+              </h3>
+              <p>
+                Нейросети — это <strong>не магия, а обучение</strong>. Они не
+                «думают» как человек, но умеют находить закономерности и
+                действовать по ним. Их сила — в масштабе и скорости. Понимая
+                базовые принципы, мы делаем ИИ надёжнее и полезнее — в науке,
+                бизнесе и повседневности.
+              </p>
+            </section>
+
+            <!-- Рекомендации (YouTube) -->
+            <section class="summary-block">
+              <h3 id="ss-videos" class="summary-block__title">
+                🎥 Рекомендованные видео
+              </h3>
+              <ul class="summary-links">
+                <li>
+                  Канал:
+                  <a
+                    class="ext"
+                    href="https://www.youtube.com/@MatterandMind"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Matter and Mind — про информационную составляющую ИИ
+                  </a>
+                </li>
+                <li>
+                  Плейлист:
+                  <a
+                    class="ext"
+                    href="https://www.youtube.com/watch?v=aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    «Подробный принцип работы нейросетей» (серия поясняющих
+                    видео)
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </section>
+      <!-- ===================== КОНЕЦ: ПО ПРОСТОМУ И ПОНЯТНОМУ ==================== -->
+
+      <!-- Основное содержание статьи -->
+
+      <article class="article-content-section">
+        <div class="container">
+          <div class="article-content">
+            <!-- Блок с оглавлением -->
+            <!-- ЗАМЕНИТЕ существующий article-toc на этот код -->
+            <aside class="article-toc scrollbar-visible gradient-scrollbar">
+              <div class="toc-header">
+                <h3>Содержание статьи</h3>
+              </div>
+              <div class="toc-content">
+                <nav class="toc-nav">
+                  <ul>
+                    <li>
+                      <a href="#section1" class="toc-link"
+                        >Введение в архитектуру нейросетей</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section2" class="toc-link"
+                        >Фундаментальные концепции нейросетевых систем</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section3" class="toc-link"
+                        >Эволюция нейросетевых технологий</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section4" class="toc-link"
+                        >Основные компоненты нейронных сетей</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section5" class="toc-link"
+                        >Типы архитектур нейронных сетей</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section6" class="toc-link"
+                        >Сверточные нейронные сети (CNN)</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section7" class="toc-link"
+                        >Рекуррентные нейронные сети (RNN)</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section8" class="toc-link">Трансформеры</a>
+                    </li>
+                    <li>
+                      <a href="#section9" class="toc-link"
+                        >Генеративные модели</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section10" class="toc-link"
+                        >Методологии машинного обучения</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section11" class="toc-link"
+                        >Практические применения нейронных сетей</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section12" class="toc-link"
+                        >Современные тренды и перспективы развития</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section13" class="toc-link"
+                        >Методологические вызовы и ограничения</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#section14" class="toc-link">Заключение</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </aside>
+
+            <!-- Основной текст статьи -->
+            <div class="article-main">
+              <!-- Введение -->
+              <section id="section1" class="article-section">
+                <h2>Введение в архитектуру нейросетей</h2>
+                <div class="section-summary --grid-divided">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Нейросеть — это композиция простых «нейронов», которые
+                      учатся из данных.
+                    </li>
+                    <li>
+                      Слои и активации позволяют аппроксимировать сложные
+                      нелинейные зависимости.
+                    </li>
+                    <li>
+                      Обучение = поиск весов, минимизирующих ошибку на примерах.
+                    </li>
+                  </ul>
+                </div>
+                <p>
+                  Искусственные нейронные сети представляют собой один из
+                  наиболее динамично развивающихся разделов современной
+                  компьютерной науки, трансформирующий подходы к решению сложных
+                  задач в области компьютерного зрения, обработки естественного
+                  языка, распознавания образов и предиктивной аналитики.
+                  Нейросетевые технологии, основанные на математическом
+                  моделировании биологических процессов человеческого мозга,
+                  демонстрируют беспрецедентную эффективность в задачах,
+                  требующих выявления сложных нелинейных зависимостей в больших
+                  массивах данных.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/1.1.jpeg"
+                    alt="Архитектура нейронной сети"
+                  />
+                  <p class="image-caption">
+                    Рис. 1. Базовая архитектура нейронной сети
+                  </p>
+                </div>
+              </section>
+
+              <!-- Фундаментальные концепции -->
+              <section id="section2" class="article-section">
+                <h2>Фундаментальные концепции нейросетевых систем</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Параметры (веса/смещения) определяют поведение сети.
+                    </li>
+                    <li>Функция потерь измеряет ошибку предсказаний.</li>
+                    <li>
+                      Градиентный спуск корректирует веса в сторону уменьшения
+                      ошибки.
+                    </li>
+                  </ul>
+                </div>
+                <p>
+                  Искусственная нейронная сеть представляет собой математическую
+                  модель, воспроизводящую принципы функционирования
+                  биологических нейронных структур для создания систем с
+                  элементами искусственного интеллекта. Базовым элементом такой
+                  системы является искусственный нейрон — простая функция,
+                  принимающая взвешенные входные сигналы, суммирующая их и
+                  пропускающая через нелинейную функцию активации для генерации
+                  выходного сигнала.
+                </p>
+
+                <div class="code-block block-code">
+                  <div class="code-header">
+                    <span>Математическая модель нейрона</span>
+                    <button class="copy-code">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                  <div class="math-block">
+                    $$ y = f\!\left( \sum_i w_i x_i + b \right) $$
+                  </div>
+                </div>
+                <div class="formula-explainer">
+                  <strong>Идея:</strong> нейрон суммирует входы с весами и
+                  добавляет смещение b, затем проходит через нелинейность f
+                  (например, ReLU или сигмоиду). Это позволяет сети моделировать
+                  сложные зависимости, а не только линейные.
+                </div>
+                <p>
+                  Интуитивно это так: нейрон собирает “доказательства” из
+                  входов. Каждый вход xᵢ умножается на вес wᵢ (насколько он
+                  важен), к сумме прибавляется смещение b (порог срабатывания),
+                  а затем применяется нелинейность f, чтобы модель умела
+                  отличать “чуть-чуть больше” от “принципиально иначе”. Без f
+                  нейросеть вела бы себя как обычная линейная формула; именно
+                  нелинейность позволяет распознавать сложные паттерны. Пример:
+                  в задаче распознавания цифр часть весов “активируется” на
+                  вертикальные штрихи, часть — на дуги; функция активации
+                  решает, сработал ли нужный набор признаков достаточно сильно,
+                  чтобы выдать уверенный ответ.
+                </p>
+
+                <p>
+                  Процесс обучения нейронной сети базируется на алгоритме
+                  обратного распространения ошибки (backpropagation), который
+                  позволяет корректировать веса синаптических связей на основе
+                  разности между желаемым и фактическим выходом. Градиент
+                  функции потерь вычисляется для каждого параметра сети, после
+                  чего веса обновляются в направлении, минимизирующем ошибку:
+                </p>
+
+                <div class="code-block block-code">
+                  <div class="code-header">
+                    <span>Обновление весов</span>
+                    <button class="copy-code">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                  <div class="math-block">
+                    $$ w_{\text{new}} = w_{\text{old}} - \eta \, \frac{\partial
+                    L}{\partial w} $$
+                  </div>
+                </div>
+                <div class="formula-explainer">
+                  <strong>Идея:</strong> градиентный спуск. Мы двигаем веса в
+                  сторону, где ошибка L уменьшается. η — «скорость обучения»:
+                  чем больше, тем агрессивнее шаг.
+                </div>
+                <p>
+                  где η — скорость обучения (насколько “широкими шагами”
+                  обновлять веса), а L — функция потерь (насколько текущий ответ
+                  модели плох). Знак “минус” означает движение в сторону
+                  уменьшения ошибки. На практике градиент считают по мини-батчу
+                  (не по всей выборке, чтобы ускорить обучение), а η подбирают
+                  так, чтобы шаг был устойчивым: слишком маленький — будем
+                  учиться очень долго, слишком большой — начнём “скакать” вокруг
+                  минимума. Часто используют расписания η (уменьшают во времени)
+                  и оптимизаторы вроде Adam, которые автоматически подстраивают
+                  шаги для разных весов.
+                </p>
+              </section>
+
+              <!-- Эволюция нейросетевых технологий -->
+              <section id="section3" class="article-section">
+                <h2>Эволюция нейросетевых технологий</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      От простых персептронов к глубоким CNN/RNN и
+                      трансформерам.
+                    </li>
+                    <li>
+                      Решающее ускорение дали данные, GPU и новые архитектуры.
+                    </li>
+                    <li>
+                      Современные модели комбинируют обучение с учителем/без и
+                      генерацию.
+                    </li>
+                  </ul>
+                </div>
+                <p>
+                  История развития нейронных сетей характеризуется несколькими
+                  революционными вехами. В 1998 году Ян ЛеКун представил
+                  архитектуру LeNet-5 — одну из первых сверточных нейронных
+                  сетей, предназначенную для распознавания рукописных цифр. Эта
+                  архитектура заложила фундаментальные принципы глубокого
+                  обучения, особенно в контексте обработки изображений с
+                  использованием пространственной корреляции пикселей.
+                </p>
+
+                <p>
+                  Период с 1998 по 2010 годы характеризовался относительной
+                  стагнацией в развитии нейросетевых технологий, несмотря на
+                  постепенное совершенствование алгоритмов. Прорыв произошел в
+                  2012 году, когда Алексей Крижевский представил AlexNet —
+                  глубокую сверточную нейронную сеть, с большим отрывом
+                  победившую на соревновании ImageNet. AlexNet использовала
+                  блоки линейной ректификации (ReLU) в качестве функций
+                  активации, технику Dropout для предотвращения переобучения и
+                  вычислительные возможности графических процессоров NVIDIA для
+                  ускорения обучения.
+                </p>
+
+                <p>
+                  Дальше глубина сетей росла, но рост параметров сдерживали
+                  архитектурные идеи: остаточные связи (ResNet) устранили
+                  затухание градиентов, “бутылочные горлышки” и 1×1-свёртки
+                  уменьшали вычисления без потери качества, а нормализация и
+                  регуляризация стабилизировали обучение. В итоге стали доступны
+                  сети на сотни слоёв, но их можно было обучать надёжно и
+                  быстрее.
+                </p>
+              </section>
+
+              <!-- Основные компоненты -->
+              <section id="section4" class="article-section">
+                <h2>Основные компоненты нейронных сетей</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Слои, функции активации, нормализация, регуляризация.
+                    </li>
+                    <li>Оптимизаторы (SGD/Adam) управляют шагами обучения.</li>
+                    <li>Даталоадеры, батчи и эпохи определяют рабочий цикл.</li>
+                  </ul>
+                </div>
+                <p>
+                  Любая нейронная сеть состоит из нескольких ключевых
+                  компонентов, каждый из которых выполняет определенную функцию
+                  в процессе обработки информации.
+                </p>
+
+                <div class="features-grid">
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h4>Слои нейронов</h4>
+                    <p>
+                      Основные строительные блоки, организованные в входные,
+                      скрытые и выходные слои
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h4>Функции активации</h4>
+                    <p>
+                      Определяют выходное значение нейрона на основе взвешенной
+                      суммы входов
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>Алгоритмы обучения</h4>
+                    <p>
+                      Методы оптимизации весовых коэффициентов для минимизации
+                      ошибки
+                    </p>
+                  </div>
+                </div>
+
+                <h3>Структурная организация нейросетей</h3>
+                <p>
+                  Типичная нейронная сеть организована в виде слоистой
+                  структуры, включающей входной слой, один или несколько скрытых
+                  слоев и выходной слой. Входной слой принимает исходные данные
+                  и передает их в скрытые слои, где происходит основная
+                  обработка и извлечение признаков. Выходной слой генерирует
+                  финальные предсказания или классификации на основе
+                  обработанной информации.
+                </p>
+
+                <p>
+                  Скрытые слои являются ключевым элементом, определяющим
+                  вычислительную мощь нейронной сети. Каждый скрытый слой
+                  извлекает различные признаки из входных данных — от простых
+                  (края, углы) на начальных слоях до сложных абстрактных
+                  концепций (объекты, лица) на глубоких слоях. Количество
+                  скрытых слоев потенциально неограничено и зависит от сложности
+                  решаемой задачи и архитектурных особенностей сети.
+                </p>
+
+                <h3>Функции активации</h3>
+                <p>
+                  Функции активации обеспечивают нелинейность нейронных сетей,
+                  позволяя им моделировать сложные зависимости в данных. Среди
+                  наиболее распространенных функций активации выделяются:
+                </p>
+
+                <div class="features-grid">
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Сигмоидная функция</h4>
+                    <p>
+                      Преобразует вход в диапазон (0,1) и исторически
+                      применялась в скрытых слоях; сейчас чаще используют её на
+                      выходе бинарных моделей (вероятность класса). Минусы в
+                      глубоких сетях — “насыщение”: при больших |x| градиент
+                      становится близким к нулю, из-за чего обучение
+                      замедляется.
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h4>Гиперболический тангенс</h4>
+                    <p>
+                      Диапазон (−1,1) и центрирование вокруг нуля помогают
+                      оптимизации (градиенты более сбалансированы). Как и
+                      сигмоида, может “насыщаться” на больших |x|, что ослабляет
+                      градиенты. В рекуррентных сетях tanh часто выступает как
+                      “мягкая” нелинейность внутри ячеек.
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>ReLU</h4>
+                    <p>
+                      Простая и быстрая нелинейность: пропускает только
+                      положительные значения. Почти не страдает от затухающего
+                      градиента на положительной полуплоскости, ускоряет
+                      обучение и делает активации разрежёнными. Из минусов —
+                      “мертвые” нейроны (если входы часто < 0, градиент там не
+                      течёт). Варианты: LeakyReLU/ELU/GELU — смягчают этот
+                      эффект.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/2.1.png"
+                    alt="Функции активации"
+                  />
+                  <p class="image-caption">
+                    Рис. 2. Сравнение функций активации
+                  </p>
+                </div>
+
+                <h3>Механизмы регуляризации</h3>
+                <p>
+                  Для предотвращения переобучения нейронных сетей применяются
+                  различные методы регуляризации. Техника Dropout, впервые
+                  использованная в AlexNet, случайным образом отключает
+                  определенную долю нейронов на каждой итерации обучения,
+                  заставляя сеть развивать более устойчивые признаки.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/5.1.png"
+                    alt="Dropout"
+                  />
+                  <p class="image-caption">Рис. 3. Механизм Dropout</p>
+                </div>
+
+                <p>
+                  Пакетная нормализация (Batch Normalization) нормализует
+                  активации в каждом слое, вычисляя среднее и стандартное
+                  отклонение по мини-батчу и масштабируя значения. Это ускоряет
+                  обучение и позволяет использовать более высокие скорости
+                  обучения, поскольку последующие слои не испытывают
+                  необходимости адаптироваться к постоянно изменяющемуся
+                  распределению входных данных.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/6.1.png"
+                    alt="Пакетная нормализация"
+                  />
+                  <p class="image-caption">Рис. 4. Пакетная нормализация</p>
+                </div>
+              </section>
+
+              <!-- Типы архитектур -->
+              <section id="section5" class="article-section">
+                <h2>Типы архитектур нейронных сетей</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      CNN — для изображений, извлекают локальные признаки
+                      свертками.
+                    </li>
+                    <li>
+                      RNN — для последовательностей, учитывают контекст во
+                      времени.
+                    </li>
+                    <li>
+                      Трансформеры — вниманием связывают элементы без рекурсии.
+                    </li>
+                  </ul>
+                </div>
+                <h3>Полносвязные нейронные сети (FNN)</h3>
+                <p>
+                  Полносвязные нейронные сети прямого распространения (Fully
+                  Connected Feed-Forward Neural Networks) представляют собой
+                  классическую архитектуру, где каждый нейрон одного слоя связан
+                  со всеми нейронами предыдущего и последующего слоев.
+                  Многослойный перцептрон является типичным примером такой
+                  архитектуры и успешно применяется для задач классификации.
+                </p>
+
+                <p>
+                  Однако FNN обладают двумя существенными ограничениями.
+                  Во-первых, они требуют огромного количества параметров для
+                  обработки высокоразмерных данных — трехслойная сеть для
+                  обработки изображений 100×100 пикселей содержит порядка
+                  миллиона параметров, что требует обширных обучающих выборок.
+                  Во-вторых, глубокие полносвязные сети страдают от проблемы
+                  затухающего градиента, когда градиент ошибки становится
+                  экспоненциально малым при обратном распространении через
+                  множество слоев, затрудняя обучение весов на начальных слоях.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/7.1.jpg"
+                    alt="Полносвязная нейронная сеть"
+                  />
+                  <p class="image-caption">
+                    Рис. 5. Полносвязная нейронная сеть
+                  </p>
+                </div>
+
+                <p>
+                  Интересной вариацией FNN являются автоэнкодеры — архитектуры с
+                  узким "бутылочным горлышком" в середине сети. Автоэнкодер
+                  обучается восстанавливать входные данные на выходе, проходя
+                  через сжатое представление. Узкий слой вынуждает сеть изучать
+                  наиболее информативные признаки данных, эффективно выполняя
+                  сжатие и извлечение латентных представлений.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/8.1.png"
+                    alt="Автоэнкодер"
+                  />
+                  <p class="image-caption">Рис. 6. Архитектура автоэнкодера</p>
+                </div>
+              </section>
+
+              <!-- Сверточные нейронные сети -->
+              <section id="section6" class="article-section">
+                <h2>Сверточные нейронные сети (CNN)</h2>
+                <h2>Сверточные нейронные сети (CNN)</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Свертка выявляет шаблоны (края, текстуры) в окрестностях.
+                    </li>
+                    <li>
+                      Pooling снижает размерность, сохраняя важные признаки.
+                    </li>
+                    <li>Каналы и глубина увеличивают выразительность.</li>
+                  </ul>
+                </div>
+                <p>
+                  Сверточные нейронные сети представляют собой
+                  специализированную архитектуру, оптимизированную для обработки
+                  данных с пространственной структурой, особенно изображений.
+                  CNN решают три основные задачи: классификацию (определение
+                  класса объекта), детекцию (локализация объектов с помощью
+                  ограничивающих рамок) и сегментацию (попиксельная
+                  классификация).
+                </p>
+
+                <p>
+                  Сверточные слои являются ключевым компонентом CNN. Свертка —
+                  это “лупа-детектор”: маленькое ядро K по очереди прикладывают
+                  к каждому фрагменту изображения I. В результате получается
+                  карта откликов: где ядро “узнало” нужный паттерн (край, угол,
+                  текстуру), там значения высокие. Несколько разных ядер
+                  извлекают разные признаки; на следующих слоях сеть комбинирует
+                  их в более сложные объекты. Формально двумерная свёртка:
+                  (I∗K)(i,j)=∑ₘ∑ₙ I(i+m,j+n)K(m,n), где I — вход, K — ядро.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/9.1.png"
+                    alt="Сверточный слой"
+                  />
+                  <p class="image-caption">
+                    Рис. 7. Принцип работы сверточного слоя
+                  </p>
+                </div>
+
+                <p>
+                  Каждый сверточный слой содержит множество обучаемых фильтров,
+                  каждый из которых извлекает определенные признаки. Ранние слои
+                  детектируют простые признаки (края, углы, градиенты), средние
+                  слои комбинируют их в более сложные паттерны (текстуры, части
+                  объектов), а глубокие слои распознают целостные объекты
+                  высокого уровня.
+                </p>
+
+                <h3>Слои субдискретизации (Pooling)</h3>
+                <p>
+                  Слои субдискретизации (Pooling) уменьшают пространственную
+                  размерность карт признаков, обеспечивая инвариантность к
+                  небольшим трансляциям и снижая вычислительную нагрузку. Max
+                  pooling выбирает максимальное значение из локальной области,
+                  сохраняя наиболее сильные активации. Average pooling вычисляет
+                  среднее значение, что обеспечивает более плавное
+                  представление.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/10.1.png"
+                    alt="Pooling"
+                  />
+                  <p class="image-caption">Рис. 8. Операция Max Pooling</p>
+                </div>
+
+                <h3>Современные архитектуры CNN</h3>
+                <p>
+                  VGGNet, разработанные в Оксфорде, впервые систематически
+                  применили малые фильтры 3×3, организованные в последовательные
+                  свертки. Ключевое открытие заключалось в том, что две свертки
+                  3×3 эквивалентны одной свертке 5×5, а три — одной 7×7, но с
+                  меньшим количеством параметров и дополнительной нелинейностью.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/11.1.jpg"
+                    alt="VGGNet"
+                  />
+                  <p class="image-caption">Рис. 9. Архитектура VGGNet</p>
+                </div>
+
+                <p>
+                  GoogLeNet представила концепцию Inception-модулей —
+                  параллельных ветвей с фильтрами разных размеров (1×1, 3×3,
+                  5×5), выходы которых конкатенируются. Критическим
+                  нововведением стало использование bottleneck-слоев — сверток
+                  1×1, уменьшающих количество каналов перед "дорогими"
+                  вычислениями. Это снизило вычислительную сложность примерно в
+                  10 раз без потери точности.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/12.1.png"
+                    alt="Inception модуль"
+                  />
+                  <p class="image-caption">
+                    Рис. 10. Inception модуль в GoogLeNet
+                  </p>
+                </div>
+
+                <p>
+                  ResNet произвела революцию в глубоком обучении, введя
+                  концепцию остаточных связей (skip connections). Вместо
+                  обучения прямого отображения H(x), ResNet обучает остаточное
+                  отображение F(x)=H(x)−x, где исходный вход x добавляется к
+                  выходу блока: H(x)=F(x)+x. Это решило проблему затухающего
+                  градиента и позволило обучать сети из сотен и даже тысяч
+                  слоев.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/13.1.png"
+                    alt="ResNet"
+                  />
+                  <p class="image-caption">Рис. 11. Остаточный блок в ResNet</p>
+                </div>
+              </section>
+
+              <!-- Рекуррентные нейронные сети -->
+              <section id="section7" class="article-section">
+                <h2>Рекуррентные нейронные сети (RNN)</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>Состояние h_t накапливает контекст прошлых шагов.</li>
+                    <li>LSTM/GRU решают затухание/взрыв градиента.</li>
+                    <li>Применение: текст, звук, временные ряды.</li>
+                  </ul>
+                </div>
+                <p>
+                  Базовая RNN на шаге t получает вход xₜ и предыдущее скрытое
+                  состояние hₜ₋₁: hₜ = tanh(Wₕₓ xₜ + Wₕₕ hₜ₋₁ + bₕ), yₜ = Wᵧₕ hₜ
+                  + bᵧ. Здесь hₜ — “краткая память” о прошлых шагах. Проблема
+                  классической RNN — затухающие/взрывающиеся градиенты на
+                  длинных последовательностях. LSTM решает это с помощью
+                  “вентилируемой” памяти cₜ: iₜ = σ(Wᵢ[xₜ; hₜ₋₁] + bᵢ) — входной
+                  вентиль (что записать), fₜ = σ(W𝒻[xₜ; hₜ₋₁] + b𝒻) — вентиль
+                  забывания (что сохранить), oₜ = σ(Wₒ[xₜ; hₜ₋₁] + bₒ) —
+                  выходной вентиль (что показать наружу), ĝₜ = tanh(Wg[xₜ; hₜ₋₁]
+                  + bg) — кандидат в память, cₜ = fₜ ⊙ cₜ₋₁ + iₜ ⊙ ĝₜ, hₜ = oₜ ⊙
+                  tanh(cₜ). Благодаря cₜ информация может “течь” сквозь много
+                  шагов почти без потерь. GRU упрощает идею (без отдельного cₜ):
+                  zₜ = σ(Wz[xₜ; hₜ₋₁]) — обновление (сколько взять из прошлого),
+                  rₜ = σ(Wr[xₜ; hₜ₋₁]) — сброс (сколько “забыть”), ĥₜ =
+                  tanh(W[xₜ; (rₜ ⊙ hₜ₋₁)]), hₜ = (1 − zₜ) ⊙ hₜ₋₁ + zₜ ⊙ ĥₜ. На
+                  практике GRU чуть проще и часто не хуже LSTM. Выбор зависит от
+                  данных и скорости/точности.
+                </p>
+
+                <p>
+                  Математически работу базовой RNN можно описать уравнениями:
+                </p>
+                <div class="code-block block-code">
+                  <div class="code-header">
+                    <span>Уравнения RNN</span>
+                    <button class="copy-code">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+
+                  <div class="math-block">
+                    h<sub>t</sub> = tanh( W<sub>hh</sub> · h<sub>t−1</sub> +
+                    W<sub>xh</sub> · x<sub>t</sub> + b<sub>h</sub> )
+                  </div>
+                  <div class="math-block">
+                    y<sub>t</sub> = W<sub>hy</sub> · h<sub>t</sub> + b<sub
+                      >y</sub
+                    >
+                  </div>
+                </div>
+
+                <p>
+                  где hₜ — скрытое состояние в момент t, xₜ — входной вектор, yₜ
+                  — выходной вектор.
+                </p>
+                <div class="formula-explainer">
+                  <strong>Идея:</strong> скрытое состояние h_t комбинирует новый
+                  вход x_t и прошлое h_{t-1}. Так модель «помнит» контекст.
+                  Выход y_t вычисляется из текущего состояния.
+                </div>
+                <p>
+                  Классические RNN страдают от проблем затухающего и
+                  взрывающегося градиента при обработке длинных
+                  последовательностей. LSTM (Long Short-Term Memory) решают эту
+                  проблему, вводя сложную ячейку памяти с управляющими
+                  вентилями. LSTM содержит три типа вентилей: входной (input
+                  gate), забывающий (forget gate) и выходной (output gate),
+                  которые регулируют поток информации через ячейку.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/14.1.jpg"
+                    alt="LSTM"
+                  />
+                  <p class="image-caption">Рис. 12. Архитектура LSTM</p>
+                </div>
+
+                <p>
+                  GRU (Gated Recurrent Units) представляют собой упрощенную
+                  версию LSTM с двумя вентилями (reset и update), обеспечивающую
+                  сопоставимую производительность при меньших вычислительных
+                  затратах.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/15.1.jpg"
+                    alt="GRU"
+                  />
+                  <p class="image-caption">Рис. 13. Архитектура GRU</p>
+                </div>
+
+                <p>
+                  Двунаправленные RNN (Bidirectional RNN) обрабатывают
+                  последовательность в обоих направлениях — вперед и назад — что
+                  позволяет учитывать как предшествующий, так и последующий
+                  контекст для каждого элемента. Это особенно важно для задач,
+                  где вся последовательность доступна заранее, например, при
+                  анализе предложений.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/16.1.png"
+                    alt="Двунаправленная RNN"
+                  />
+                  <p class="image-caption">Рис. 14. Двунаправленная RNN</p>
+                </div>
+              </section>
+
+              <!-- Трансформеры -->
+              <section id="section8" class="article-section">
+                <h2>Трансформеры</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Attention взвешивает важные элементы последовательности.
+                    </li>
+                    <li>
+                      Многоголовое внимание учит разные «взгляды» на данные.
+                    </li>
+                    <li>Позиционное кодирование добавляет порядок.</li>
+                  </ul>
+                </div>
+                <p>
+                  Архитектура трансформеров, представленная в статье "Attention
+                  is All You Need" в 2017 году, произвела революцию в обработке
+                  последовательностей. Трансформеры полностью отказались от
+                  рекуррентности, основываясь исключительно на механизме
+                  внимания (attention mechanism).
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/17.1.jpg"
+                    alt="Трансформер"
+                  />
+                  <p class="image-caption">Рис. 15. Архитектура трансформера</p>
+                </div>
+
+                <p>
+                  Механизм внимания позволяет модели динамически фокусироваться
+                  на различных частях входной последовательности при генерации
+                  каждого элемента выхода. Scaled Dot-Product Attention
+                  вычисляется как:
+                </p>
+
+                <div class="code-block block-code">
+                  <div class="code-header">
+                    <span>Механизм внимания</span>
+                    <button class="copy-code">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                  <div class="math-block">
+                    Attention(Q, K, V) = softmax(
+                    <span class="frac"
+                      ><span class="num">QK<sup>T</sup></span
+                      ><span class="bar"></span
+                      ><span class="den">√d<sub>k</sub></span></span
+                    >
+                    ) · V
+                  </div>
+                </div>
+                <p>
+                  где Q (queries), K (keys) и V (values) — это линейные проекции
+                  входных данных, а dₖ — размерность ключей.
+                </p>
+                <div class="formula-explainer">
+                  <strong>Идея:</strong> считаем похожесть запроса Q к каждому
+                  ключу K, нормируем (softmax), получаем веса внимания и
+                  усредняем значения V с этими весами. Модель фокусируется на
+                  «важных» местах.
+                </div>
+                <p>
+                  Multi-head attention использует несколько параллельных
+                  механизмов внимания ("голов"), каждый из которых обучается
+                  фокусироваться на различных аспектах входных данных.
+                  Результаты всех голов конкатенируются и проецируются:
+                  MultiHead(Q,K,V)=Concat(head₁,...,headₕ)Wᴼ.
+                </p>
+
+                <p>
+                  Трансформеры состоят из энкодера и декодера, каждый из которых
+                  содержит стек из нескольких идентичных слоев. Энкодер
+                  преобразует входную последовательность в набор непрерывных
+                  представлений, которые декодер использует для генерации
+                  выходной последовательности. Ключевым преимуществом является
+                  возможность параллельной обработки всех элементов
+                  последовательности, что значительно ускоряет обучение по
+                  сравнению с RNN.
+                </p>
+
+                <p>
+                  Позиционное кодирование добавляется к входным эмбеддингам для
+                  внесения информации о позиции элементов в последовательности,
+                  поскольку механизм внимания сам по себе не учитывает порядок
+                  элементов. Используются синусоидальные функции разных частот
+                  или обучаемые позиционные эмбеддинги.
+                </p>
+
+                <p>
+                  Трансформеры стали основой для революционных моделей, таких
+                  как BERT (Bidirectional Encoder Representations from
+                  Transformers) для понимания языка и GPT (Generative
+                  Pre-trained Transformer) для генерации текста.
+                </p>
+              </section>
+
+              <!-- Генеративные модели -->
+              <section id="section9" class="article-section">
+                <h2>Генеративные модели</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      VAE: учат латентное представление и восстанавливают вход.
+                    </li>
+                    <li>GAN: игра двух сетей — генератора и дискриминатора.</li>
+                    <li>Diffusion: пошаговое «очищение» шума к данным.</li>
+                  </ul>
+                </div>
+                <h3>Генеративно-состязательные сети (GAN)</h3>
+                <p>
+                  Генеративно-состязательные сети, предложенные Яном Гудфеллоу в
+                  2014 году, состоят из двух конкурирующих нейронных сетей:
+                  генератора и дискриминатора. Генератор создает синтетические
+                  данные из случайного шума, пытаясь обмануть дискриминатора.
+                  Дискриминатор обучается различать реальные данные от
+                  сгенерированных.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/18.1.jpg"
+                    alt="GAN"
+                  />
+                  <p class="image-caption">Рис. 16. Архитектура GAN</p>
+                </div>
+
+                <p>Обучение формализуется как минимаксная игра:</p>
+                <div class="code-block block-code">
+                  <div class="code-header">
+                    <span>Минимаксная игра GAN</span>
+                    <button class="copy-code">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                  <div class="math-block">
+                    min<sub>G</sub> max<sub>D</sub> E<sub
+                      >x~p<sub>data</sub></sub
+                    >[log D(x)] + E<sub>z~p<sub>z</sub></sub
+                    >[log(1 − D(G(z)))]
+                  </div>
+                </div>
+                <p>
+                  где G — генератор, D — дискриминатор, x — реальные данные, z —
+                  случайный вектор.
+                </p>
+                <div class="formula-explainer">
+                  <strong>Идея:</strong> дискриминатор учится отличать реальные
+                  данные от сгенерированных, а генератор — обманывать
+                  дискриминатор. Игра «кто кого» ведёт к реалистичным образцам.
+                </div>
+                <p>
+                  StyleGAN усовершенствовала архитектуру GAN, вводя управление
+                  стилем генерируемых изображений на различных уровнях
+                  детализации. Progressive GAN постепенно увеличивает разрешение
+                  генерируемых изображений от низкого к высокому, что
+                  стабилизирует обучение и улучшает качество.
+                </p>
+
+                <h3>Вариационные автоэнкодеры (VAE)</h3>
+                <p>
+                  Вариационные автоэнкодеры представляют собой вероятностную
+                  генеративную модель, комбинирующую идеи автоэнкодеров с
+                  вариационным выводом. VAE кодирует входные данные не в
+                  фиксированную точку латентного пространства, а в распределение
+                  (обычно гауссовское), характеризуемое средним μ и стандартным
+                  отклонением σ.
+                </p>
+
+                <div class="article-image">
+                  <img
+                    src="./Обзоры ИИ/Изображения/Статьи/1/19.1.png"
+                    alt="VAE"
+                  />
+                  <p class="image-caption">Рис. 17. Архитектура VAE</p>
+                </div>
+
+                <p>
+                  Функция потерь VAE состоит из двух компонентов: ошибки
+                  реконструкции и регуляризатора в виде KL-дивергенции между
+                  кодируемым распределением и стандартным нормальным
+                  распределением:
+                </p>
+                <div class="code-block block-code">
+                  <div class="code-header">
+                    <span>Функция потерь VAE</span>
+                    <button class="copy-code">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                  <div class="math-block">
+                    L = E<sub>z~q(z|x)</sub>[log p(x|z)] − D<sub>KL</sub>(q(z|x)
+                    || p(z))
+                  </div>
+                </div>
+                <p>
+                  где первый член обеспечивает качество реконструкции, а второй
+                  делает латентное пространство непрерывным и пригодным для
+                  генерации.
+                </p>
+                <div class="formula-explainer">
+                  <strong>Идея:</strong> первая часть — насколько хорошо мы
+                  восстанавливаем x из скрытой переменной z; вторая (KL) —
+                  аккуратная регуляризация латентного пространства, чтобы оно
+                  было «ровным» и осмысленным.
+                </div>
+                <p>
+                  VAE создают более структурированное и интерпретируемое
+                  латентное пространство по сравнению с GAN, но часто генерируют
+                  менее четкие изображения. Conditional VAE расширяют базовую
+                  модель, позволяя контролировать процесс генерации через
+                  дополнительную входную информацию (метки классов, атрибуты).
+                </p>
+              </section>
+
+              <!-- Методологии машинного обучения -->
+              <section id="section10" class="article-section">
+                <h2>Методологии машинного обучения</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Разделяйте валидацию/тест, чтобы избегать переобучения.
+                    </li>
+                    <li>
+                      Регуляризация и ранняя остановка улучшают обобщение.
+                    </li>
+                    <li>Логи/метрики и репродуцируемость — must-have.</li>
+                  </ul>
+                </div>
+                <h3>Парадигмы обучения нейронных сетей</h3>
+                <div class="features-grid">
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h4>Обучение с учителем</h4>
+                    <p>
+                      Модель обучается на размеченных данных, содержащих пары
+                      входов и соответствующих правильных выходов
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Обучение без учителя</h4>
+                    <p>
+                      Работает с неразмеченными данными, выявляя скрытые
+                      структуры и закономерности
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-robot"></i>
+                    </div>
+                    <h4>Обучение с подкреплением</h4>
+                    <p>
+                      Обучает агента принимать последовательность решений для
+                      максимизации кумулятивной награды
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h4>Полу- и самообучение</h4>
+                    <p>
+                      Комбинируют небольшое количество размеченных данных с
+                      большим объемом неразмеченных
+                    </p>
+                  </div>
+                </div>
+
+                <h3>Метрики оценки качества моделей</h3>
+                <p>
+                  Для оценки качества моделей машинного обучения используются
+                  различные метрики в зависимости от типа задачи:
+                </p>
+
+                <div class="metrics-table">
+                  <div class="metric-row">
+                    <div class="metric-name">Точность (Accuracy)</div>
+                    <div class="metric-description">
+                      Доля правильных предсказаний среди всех сделанных
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-name">Precision и Recall</div>
+                    <div class="metric-description">
+                      Метрики для задач классификации с несбалансированными
+                      классами
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-name">F1-мера</div>
+                    <div class="metric-description">
+                      Гармоническое среднее между precision и recall
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-name">Перекрестная энтропия</div>
+                    <div class="metric-description">
+                      Метрика для задач классификации с вероятностным выходом
+                    </div>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-name">Среднеквадратичная ошибка</div>
+                    <div class="metric-description">
+                      Основная метрика для задач регрессии
+                    </div>
+                  </div>
+                </div>
+
+                <h3>Техники валидации моделей</h3>
+                <p>
+                  Для надежной оценки обобщающей способности моделей
+                  используются различные техники валидации:
+                </p>
+
+                <div class="features-grid">
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-random"></i>
+                    </div>
+                    <h4>Разделение на обучающую и тестовую выборки</h4>
+                    <p>
+                      Стандартный подход с разделением данных на обучающую и
+                      тестовую части
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h4>K-кратная перекрестная валидация</h4>
+                    <p>
+                      Данные разбиваются на K частей, модель обучается K раз на
+                      разных комбинациях
+                    </p>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Временные разделения</h4>
+                    <p>
+                      Для временных рядов данные разделяются по времени для
+                      предотвращения утечки информации
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Практические применения -->
+              <section id="section11" class="article-section">
+                <h2>Практические применения нейронных сетей</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>
+                      Компьютерное зрение: классификация, детекция, сегментация.
+                    </li>
+                    <li>NLP: перевод, суммаризация, чат-ассистенты.</li>
+                    <li>Рекомендации, прогнозы, аномалии — в продакшне.</li>
+                  </ul>
+                </div>
+                <h3>Компьютерное зрение</h3>
+                <div class="applications-grid">
+                  <div class="application-card" data-app="app-vision">
+                    <div class="app-icon">
+                      <i class="fas fa-camera"></i>
+                    </div>
+                    <h4>Распознавание объектов</h4>
+                    <p>
+                      Автоматическое обнаружение и классификация объектов на
+                      изображениях
+                    </p>
+                  </div>
+                  <div class="application-card" data-app="app-healthcare">
+                    <div class="app-icon">
+                      <i class="fas fa-user-md"></i>
+                    </div>
+                    <h4>Медицинская диагностика</h4>
+                    <p>
+                      Анализ медицинских изображений для выявления патологий
+                    </p>
+                  </div>
+                  <div class="application-card" data-app="app-autonomous">
+                    <div class="app-icon">
+                      <i class="fas fa-car"></i>
+                    </div>
+                    <h4>Автономные транспортные средства</h4>
+                    <p>
+                      Распознавание дорожных знаков, пешеходов и препятствий
+                    </p>
+                  </div>
+                  <div class="application-card" data-app="app-biometrics">
+                    <div class="app-icon">
+                      <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h4>Биометрия</h4>
+                    <p>
+                      Распознавание лиц и других биометрических характеристик
+                    </p>
+                  </div>
+                </div>
+
+                <h3>Обработка естественного языка</h3>
+                <div class="applications-grid">
+                  <div class="application-card" data-app="app-translation">
+                    <div class="app-icon">
+                      <i class="fas fa-language"></i>
+                    </div>
+                    <h4>Машинный перевод</h4>
+                    <p>Автоматический перевод текстов между языками</p>
+                  </div>
+                  <div class="application-card" data-app="app-chatbots">
+                    <div class="app-icon">
+                      <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h4>Чат-боты и виртуальные ассистенты</h4>
+                    <p>
+                      Интеллектуальные системы для взаимодействия с
+                      пользователями
+                    </p>
+                  </div>
+                  <div class="application-card" data-app="app-doc-analysis">
+                    <div class="app-icon">
+                      <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4>Анализ тональности</h4>
+                    <p>Определение эмоциональной окраски текстов</p>
+                  </div>
+                  <div class="application-card" data-app="app-search">
+                    <div class="app-icon">
+                      <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Извлечение информации</h4>
+                    <p>
+                      Автоматическое извлечение структурированной информации из
+                      текстов
+                    </p>
+                  </div>
+                </div>
+
+                <h3>Обработка сигналов</h3>
+                <div class="applications-grid">
+                  <div class="application-card" data-app="app-speech">
+                    <div class="app-icon">
+                      <i class="fas fa-microphone"></i>
+                    </div>
+                    <h4>Распознавание речи</h4>
+                    <p>Преобразование речи в текст</p>
+                  </div>
+                  <div class="application-card" data-app="app-music">
+                    <div class="app-icon">
+                      <i class="fas fa-music"></i>
+                    </div>
+                    <h4>Анализ аудио</h4>
+                    <p>
+                      Классификация музыкальных жанров, идентификация
+                      исполнителей
+                    </p>
+                  </div>
+                  <div class="application-card" data-app="app-signals">
+                    <div class="app-icon">
+                      <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h4>Синтез речи</h4>
+                    <p>Генерация естественно звучащей речи из текста</p>
+                  </div>
+                  <div
+                    class="application-card"
+                    data-app="app-patient-monitoring"
+                  >
+                    <div class="app-icon">
+                      <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h4>Биомедицинские сигналы</h4>
+                    <p>Анализ ЭКГ, ЭЭГ и других медицинских сигналов</p>
+                  </div>
+                </div>
+
+                <h3>Рекомендательные системы</h3>
+                <p>
+                  Нейронные сети широко используются для построения
+                  рекомендательных систем, которые предсказывают предпочтения
+                  пользователей на основе их истории взаимодействий и поведения.
+                  Современные подходы используют гибридные архитектуры,
+                  комбинирующие коллаборативную фильтрацию с глубоким обучением
+                  для учета сложных нелинейных зависимостей.
+                </p>
+
+                <h3>Автоматическое проектирование нейронных сетей (NAS)</h3>
+                <p>
+                  Автоматическое проектирование нейронных сетей (Neural
+                  Architecture Search) представляет собой область, где нейронные
+                  сети используются для проектирования других нейронных сетей.
+                  NAS автоматизирует процесс поиска оптимальной архитектуры для
+                  конкретной задачи, что значительно сокращает время разработки
+                  и часто приводит к созданию более эффективных моделей.
+                </p>
+              </section>
+
+              <!-- Современные тренды -->
+              <section id="section12" class="article-section">
+                <h2>Современные тренды и перспективы развития</h2>
+                <div class="section-summary">
+                  <strong>Коротко по разделу:</strong>
+                  <ul>
+                    <li>Мультимодальность: текст+изображение+аудио.</li>
+                    <li>
+                      Эффективность: квантование, сжатие, мало-вычислительное
+                      дообучение.
+                    </li>
+                    <li>
+                      Безопасность и интерпретируемость — ключевые направления.
+                    </li>
+                  </ul>
+                </div>
+                <h3>Эффективность и оптимизация</h3>
+                <p>
+                  Одним из ключевых направлений развития является повышение
+                  эффективности нейронных сетей. Квантование (quantization)
+                  позволяет уменьшить точность представления весов и активаций с
+                  32-битных чисел с плавающей точкой до 8-битных целых чисел,
+                  что значительно сокращает требования к памяти и вычислительной
+                  мощности без существенной потери точности.
+                </p>
+
+                <p>
+                  Прунинг (pruning) удаляет избыточные веса и нейроны, создавая
+                  разреженные сети с меньшим количеством параметров. Дистилляция
+                  знаний (knowledge distillation) позволяет обучать компактные
+                  "студенческие" модели, имитирующие поведение больших
+                  "учительских" моделей.
+                </p>
+
+                <h3>Мультимодальное обучение</h3>
+                <p>
+                  Мультимодальное обучение объединяет информацию из различных
+                  источников (текст, изображения, аудио) для создания более
+                  полных представлений. Современные модели, такие как CLIP
+                  (Contrastive Language-Image Pre-training), обучаются на парах
+                  изображение-текст и демонстрируют способность к нулевому
+                  обучению (zero-shot learning) — решению задач без явного
+                  обучения на них.
+                </p>
+
+                <h3>Нейроморфные вычисления</h3>
+                <p>
+                  Нейроморфные вычисления представляют собой подход к
+                  проектированию аппаратного обеспечения, имитирующего структуру
+                  и функционирование биологических нейронных систем.
+                  Нейроморфные чипы, такие как Loihi от Intel и TrueNorth от
+                  IBM, обещают значительное повышение энергоэффективности для
+                  задач нейросетевых вычислений.
+                </p>
+
+                <h3>Объяснимый ИИ (XAI)</h3>
+                <p>
+                  С ростом сложности нейронных сетей возрастает потребность в
+                  объяснимости их решений. Методы объяснимого ИИ (Explainable
+                  AI) направлены на создание прозрачных моделей и интерпретацию
+                  решений черных ящиков. Техники, такие как LIME (Local
+                  Interpretable Model-agnostic Explanations) и SHAP (SHapley
+                  Additive exPlanations), позволяют понять, какие входные
+                  признаки наиболее важны для конкретного предсказания.
+                </p>
+
+                <h3>Федеративное обучение</h3>
+                <p>
+                  Федеративное обучение позволяет обучать модели на
+                  распределенных данных без их централизации. Модель обучается
+                  локально на устройствах пользователей, после чего только
+                  обновления параметров отправляются на сервер для агрегации.
+                  Это обеспечивает сохранение конфиденциальности данных и
+                  снижает требования к пропускной способности сети.
+                </p>
+              </section>
+
+              <!-- Методологические вызовы -->
+              <section id="section13" class="article-section">
+                <h2>Методологические вызовы и ограничения</h2>
+
+                <h3>Этические аспекты</h3>
+                <p>
+                  Развитие нейросетевых технологий сопровождается серьезными
+                  этическими вызовами. Смещение данных (data bias) может
+                  приводить к дискриминационным предсказаниям, когда модель
+                  воспроизводит и усиливает социальные предрассудки,
+                  присутствующие в обучающих данных. Проблема "черного ящика"
+                  затрудняет понимание и объяснение решений сложных моделей, что
+                  критически важно в таких областях, как медицина и
+                  юриспруденция.
+                </p>
+
+                <h3>Технические ограничения</h3>
+                <p>
+                  Нейронные сети требуют огромных объемов данных для обучения,
+                  что ограничивает их применение в областях с недостаточной
+                  доступностью данных. Высокие вычислительные требования делают
+                  обучение сложных моделей дорогостоящим и энергозатратным
+                  процессом. Уязвимость к состязательным атакам (adversarial
+                  attacks) — небольшим, специально созданным возмущениям входных
+                  данных, которые могут кардинально изменить предсказание модели
+                  — представляет серьезную угрозу для систем безопасности.
+                </p>
+
+                <h3>Проблема обобщения</h3>
+                <p>
+                  Нейронные сети часто демонстрируют отличные результаты на
+                  данных, распределенных аналогично обучающей выборке, но могут
+                  значительно терять в точности при столкновении с данными из
+                  другого распределения. Проблема переноса знаний между доменами
+                  (domain adaptation) и устойчивости к изменениям в данных
+                  остается актуальной областью исследований.
+                </p>
+
+                <h3>Экологический след</h3>
+                <p>
+                  Обучение больших нейронных сетей связано со значительным
+                  потреблением энергии. Например, обучение модели GPT-3
+                  оценивается в сотни мегаватт-часов электроэнергии, что
+                  сопоставимо с годовым потреблением десятков домохозяйств.
+                  Разработка более энергоэффективных алгоритмов и архитектур
+                  является важным направлением для устойчивого развития области.
+                </p>
+              </section>
+
+              <!-- Заключение -->
+              <section id="section14" class="article-section">
+                <h2>Заключение</h2>
+                <p>
+                  Архитектурные принципы нейросетевых систем и методологии
+                  машинного обучения представляют собой динамично развивающуюся
+                  область, находящуюся на стыке компьютерных наук, математики и
+                  нейробиологии. От простых перцептронов до современных
+                  трансформеров и генеративных моделей, нейронные сети прошли
+                  впечатляющий путь эволюции, демонстрируя беспрецедентные
+                  возможности в решении сложных задач.
+                </p>
+
+                <p>
+                  Современные архитектуры, такие как сверточные сети,
+                  рекуррентные сети с механизмами памяти и трансформеры,
+                  обеспечивают мощные инструменты для обработки различных типов
+                  данных. Методологии обучения, включая обучение с учителем, без
+                  учителя и с подкреплением, позволяют эффективно настраивать
+                  модели для решения конкретных практических задач.
+                </p>
+
+                <p>
+                  Однако развитие нейросетевых технологий сопровождается
+                  серьезными вызовами, включая этические вопросы, технические
+                  ограничения и экологические последствия. Будущие исследования
+                  будут сосредоточены на создании более эффективных, объяснимых
+                  и устойчивых систем, способных к обобщению знаний и адаптации
+                  к изменяющимся условиям.
+                </p>
+
+                <p>
+                  Нейронные сети продолжают трансформировать подходы к решению
+                  сложных задач в самых разных областях — от компьютерного
+                  зрения и обработки естественного языка до научных исследований
+                  и творческих приложений. Понимание архитектурных принципов и
+                  методологий машинного обучения становится все более важным для
+                  исследователей, инженеров и всех, кто стремится использовать
+                  потенциал искусственного интеллекта для решения реальных
+                  проблем.
+                </p>
+              </section>
+
+              <section id="cheatsheet" class="article-section cheatsheet">
+                <h2>Шпаргалка, повтори за минуту</h2>
+                <ul class="cheatsheet-list">
+                  <li>
+                    <strong>Нейрон:</strong> суммирует взвешенные входы +
+                    смещение → нелинейность.
+                  </li>
+                  <li>
+                    <strong>Потери:</strong> измеряют расхождение предсказаний с
+                    целями.
+                  </li>
+                  <li>
+                    <strong>Градиентный спуск:</strong> обновляет веса навстречу
+                    уменьшению потерь.
+                  </li>
+                  <li>
+                    <strong>Регуляризация:</strong> L2/L1, Dropout, ранняя
+                    остановка против переобучения.
+                  </li>
+                  <li>
+                    <strong>CNN:</strong> свертки для локальных признаков,
+                    pooling для сжатия.
+                  </li>
+                  <li>
+                    <strong>RNN:</strong> состояние h_t помнит контекст
+                    последовательности (LSTM/GRU).
+                  </li>
+                  <li>
+                    <strong>Attention:</strong> фокус на важных элементах;
+                    основа трансформеров.
+                  </li>
+                  <li>
+                    <strong>GAN:</strong> генератор соревнуется с
+                    дискриминатором → реалистичные выборки.
+                  </li>
+                  <li>
+                    <strong>VAE:</strong> реконструкция + KL-регуляризация
+                    латентного пространства.
+                  </li>
+                  <li>
+                    <strong>Практика:</strong> разделяй трейн/валидацию/тест,
+                    логируй метрики, фиксируй seed.
+                  </li>
+                </ul>
+              </section>
             </div>
-        </article>
+          </div>
+        </div>
+      </article>
 
-        
-
-        <!-- Футер -->
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-section">
-                        <h3>Digital Mind Project</h3>
-                        <p>Исследовательский проект по изучению искусственного интеллекта и нейронных сетей</p>
-                
-                    </div>
-                    <div class="footer-section">
-                        <h4>Разделы</h4>
-                        <ul>
-                            <li><a href="index.html#about">О проекте</a></li>
-                            <li><a href="index.html#ai-overview">Модели ИИ</a></li>
-                            <li><a href="index.html#ai-platforms">Платформы</a></li>
-                            <li><a href="index.html#articles">Исследования</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-section">
-                        <h4>Статьи</h4>
-                        <ul>
-                            <li><a href="neural-architecture-principles.html">Архитектурные принципы нейросетей</a></li>
-                            <li><a href="#">Трансформация искусственного интеллекта: от символических систем к агентным архитектурам</a></li>
-                            <li><a href="#">Системные уязвимости искусственного интеллекта: классификация рисков и методологии защиты</a></li>
-
-                        </ul>
-                    </div>
-                    <div class="footer-section">
-                        <h4>Контакты</h4>
-                       <div class="social-links">
-    <a href="tel:+79136148506" class="social-link">
-        <i class="fas fa-phone"></i>
-        <span>+7 913 614 85 06</span>
-    </a>
-    <a href="mailto:xzi.mrv@gmail.com" class="social-link">
-        <i class="fas fa-envelope"></i>
-        <span>xzi.mrv@gmail.com</span>
-    </a>
-    <a href="https://t.me/MRV_MC" target="_blank" class="social-link">
-        <i class="fab fa-telegram"></i>
-        <span>@MRV_MC</span>
-    </a>
-</div>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <p>© 2025 DIGITAL-MIND PROJECT "Интенции и уязвимости цифрового разума". Индивидуальный исследовательский проект.</p>
-                </div>
+      <!-- Футер -->
+      <footer>
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h3>Digital Mind Project</h3>
+              <p>
+                Исследовательский проект по изучению искусственного интеллекта и
+                нейронных сетей
+              </p>
             </div>
-        </footer>
+            <div class="footer-section">
+              <h4>Разделы</h4>
+              <ul>
+                <li><a href="index.html#about">О проекте</a></li>
+                <li><a href="index.html#ai-overview">Модели ИИ</a></li>
+                <li><a href="index.html#ai-platforms">Платформы</a></li>
+                <li><a href="index.html#articles">Исследования</a></li>
+              </ul>
+            </div>
+            <div class="footer-section">
+              <h4>Статьи</h4>
+              <ul>
+                <li>
+                  <a href="neural-architecture-principles.html"
+                    >Архитектурные принципы нейросетей</a
+                  >
+                </li>
+                <li>
+                  <a href="#"
+                    >Трансформация искусственного интеллекта: от символических
+                    систем к агентным архитектурам</a
+                  >
+                </li>
+                <li>
+                  <a href="#"
+                    >Системные уязвимости искусственного интеллекта:
+                    классификация рисков и методологии защиты</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="footer-section">
+              <h4>Контакты</h4>
+              <div class="social-links">
+                <a href="tel:+79136148506" class="social-link">
+                  <i class="fas fa-phone"></i>
+                  <span>+7 913 614 85 06</span>
+                </a>
+                <a href="mailto:xzi.mrv@gmail.com" class="social-link">
+                  <i class="fas fa-envelope"></i>
+                  <span>xzi.mrv@gmail.com</span>
+                </a>
+                <a
+                  href="https://t.me/MRV_MC"
+                  target="_blank"
+                  class="social-link"
+                >
+                  <i class="fab fa-telegram"></i>
+                  <span>@MRV_MC</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>
+              © 2025 DIGITAL-MIND PROJECT "Интенции и уязвимости цифрового
+              разума". Индивидуальный исследовательский проект.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
 
     <!-- Кнопка возврата наверх -->
     <button id="backToTop" class="back-to-top">
-        <i class="fas fa-arrow-up"></i>
+      <i class="fas fa-arrow-up"></i>
     </button>
-<script src="bg.js"></script>
+    <script src="bg.js"></script>
     <script src="scripts.js"></script>
-</body>
+  </body>
 </html>
