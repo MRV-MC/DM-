@@ -62,9 +62,13 @@
 
   function openModal(modal) {
     if (!modal) return;
+    if (modal.__closeTimeout) {
+      clearTimeout(modal.__closeTimeout);
+      modal.__closeTimeout = null;
+    }
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
-    // accessibility
+    // accessibility + trigger transition
     modal.setAttribute('aria-hidden', 'false');
     const cleanupTrap = trapFocus(modal);
     modal.__trapCleanup = cleanupTrap;
@@ -72,9 +76,15 @@
 
   function closeModal(modal) {
     if (!modal) return;
-    modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     modal.setAttribute('aria-hidden', 'true');
+    if (modal.__closeTimeout) {
+      clearTimeout(modal.__closeTimeout);
+    }
+    modal.__closeTimeout = window.setTimeout(() => {
+      modal.style.display = 'none';
+      modal.__closeTimeout = null;
+    }, 460);
     if (typeof modal.__trapCleanup === 'function') {
       modal.__trapCleanup();
       modal.__trapCleanup = null;
@@ -164,6 +174,82 @@
   }
 
   /* ------------------------ Copy buttons for formulas --------------------- */
+
+  function initCardTilt() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const cards = document.querySelectorAll('.model-card, .article-card');
+    if (!cards.length) return;
+    const maxTilt = 24;
+    const shadow = '0 48px 90px rgba(0, 0, 0, 0.7)';
+
+    const resetCard = card => {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+    };
+
+    cards.forEach(card => {
+      const handleMove = e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotateY = (x - 0.5) * maxTilt;
+        const rotateX = -(y - 0.5) * maxTilt;
+        card.style.transform = `perspective(1400px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(18px) scale(1.025)`;
+        card.style.boxShadow = shadow;
+        card.style.setProperty('--card-highlight-x', `${(x * 100).toFixed(1)}%`);
+        card.style.setProperty('--card-highlight-y', `${(y * 100).toFixed(1)}%`);
+      };
+
+      card.addEventListener('mousemove', handleMove);
+      card.addEventListener('mouseleave', () => resetCard(card));
+      card.addEventListener('blur', () => resetCard(card));
+    });
+  }
+
+  function initPhotoViewer() {
+    const viewer = document.getElementById('photoViewer');
+    if (!viewer) return;
+    const viewerImage = viewer.querySelector('img');
+    const closeButton = viewer.querySelector('.photo-viewer-close');
+    if (!viewerImage || !closeButton) return;
+
+    const closeViewer = () => {
+      viewer.classList.remove('is-visible');
+      viewer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('photo-viewer-lock');
+      viewerImage.removeAttribute('src');
+      viewerImage.removeAttribute('alt');
+    };
+
+    const openViewer = img => {
+      const src = img.dataset.previewSrc || img.src;
+      viewerImage.src = src;
+      viewerImage.alt = img.alt || '';
+      viewer.classList.add('is-visible');
+      viewer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('photo-viewer-lock');
+    };
+
+    closeButton.addEventListener('click', closeViewer);
+    viewer.addEventListener('click', e => {
+      if (e.target === viewer) {
+        closeViewer();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && viewer.classList.contains('is-visible')) {
+        closeViewer();
+      }
+    });
+
+    document.addEventListener('click', e => {
+      const image = e.target.closest('.model-modal img, .application-modal img');
+      if (!image) return;
+      e.preventDefault();
+      openViewer(image);
+    });
+  }
 
   function bindCopyButtons() {
     // Works for any block with .copy-code inside .block-code
@@ -290,6 +376,8 @@
 
   onReady(function () {
     bindModals();
+    initCardTilt();
+    initPhotoViewer();
     bindCopyButtons();
     bindBackToTop();
     enhanceTocScrollbar();
@@ -936,3 +1024,94 @@ document.querySelectorAll(".anchor-link").forEach(n => n.textContent = "");
     history.replaceState(null, '', id);
   });
 })();
+
+// Enhance model-card tags with semantic labels per model
+(function () {
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn, { once: true });
+    } else { fn(); }
+  }
+
+  
+
+  function applyTags() {
+    const cards = document.querySelectorAll('.model-card[data-model]');
+    cards.forEach(card => {
+      const key = card.getAttribute('data-model');
+      const tags = TAGS[key];
+      if (!tags || !tags.length) return;
+      const footer = card.querySelector('.model-card-footer');
+      if (!footer) return;
+      const button = footer.querySelector('.btn, .btn-outline');
+
+      // Ensure tag container exists and is placed before the action button
+      let list = footer.querySelector('.tag-list');
+      if (!list) {
+        list = document.createElement('div');
+        list.className = 'tag-list';
+        if (button) {
+          footer.insertBefore(list, button);
+        } else {
+          footer.insertBefore(list, footer.firstChild);
+        }
+      }
+
+      // Clear previous chips (both old and in-list)
+      list.innerHTML = '';
+      footer.querySelectorAll('.tag').forEach(el => {
+        if (!list.contains(el)) el.remove();
+      });
+
+      // Show up to 3 tags; the rest go into "+N"
+      const maxVisible = 3;
+      const visible = tags.slice(0, maxVisible);
+      const hidden = tags.slice(maxVisible);
+
+      visible.forEach(label => {
+        const span = document.createElement('span');
+        span.className = 'tag';
+        span.textContent = label;
+        list.appendChild(span);
+      });
+
+      if (hidden.length) {
+        const more = document.createElement('span');
+        more.className = 'tag tag--more';
+        more.textContent = `+${hidden.length}`;
+        more.title = hidden.join(', ');
+        list.appendChild(more);
+      }
+    });
+  }
+
+  ready(applyTags);
+})();
+// Переключение вкладок во всех модалках с .modal-tabs
+document.addEventListener("click", (event) => {
+  const tab = event.target.closest(".modal-tabs [role='tab']");
+  if (!tab) return;
+
+  const tabsContainer = tab.parentElement;
+  const modal = tabsContainer.closest(".model-modal-content");
+  const tabId = tab.id;
+  const controls = tab.getAttribute("aria-controls");
+
+  // Обновляем состояние кнопок
+  tabsContainer.querySelectorAll("[role='tab']").forEach((btn) => {
+    const isActive = btn === tab;
+    btn.setAttribute("aria-selected", String(isActive));
+    btn.setAttribute("tabindex", isActive ? "0" : "-1");
+  });
+
+  // Показываем нужную панель и скрываем остальные
+  modal.querySelectorAll(".modal-tab-panel").forEach((panel) => {
+    if (panel.id === controls) {
+      panel.classList.add("is-active");
+      panel.removeAttribute("hidden");
+    } else {
+      panel.classList.remove("is-active");
+      panel.setAttribute("hidden", "true");
+    }
+  });
+});
