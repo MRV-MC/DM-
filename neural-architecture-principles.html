@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
@@ -28,13 +28,13 @@
     <!-- Основной контент -->
     <div class="main-content">
       <!-- Шапка -->
-      <header>
+      <header class="site-header">
         <div class="container">
           <div class="header-content">
             <a href="index.html" class="logo" aria-label="DM Project">
               DM'<span class="logo-title">Project</span>
             </a>
-            <nav>
+            <nav id="primary-nav" aria-label="Основная навигация">
               <ul>
                 <li><a href="index.html#about">О проекте</a></li>
                 <li><a href="index.html#ai-overview">Модели ИИ</a></li>
@@ -42,7 +42,15 @@
                 <li><a href="index.html#articles">Исследования</a></li>
               </ul>
             </nav>
-            <button class="mobile-menu-btn">☰</button>
+            <button
+              class="mobile-menu-btn"
+              type="button"
+              aria-label="Открыть меню"
+              aria-controls="primary-nav"
+              aria-expanded="false"
+            >
+              ☰
+            </button>
           </div>
         </div>
       </header>
@@ -1962,7 +1970,7 @@
                 </p>
               </section>
                    <!-- ======================== ПО ПРОСТОМУ И ПОНЯТНОМУ ======================== -->
-      <section id="simple-summary" class="simple-summary section">
+      <section id="simple-summary" class="simple-summary section scroll-target">
         <div class="container">
           <header class="simple-summary__header">
             <h2 class="simple-summary__title">🧠 По простому и понятному</h2>
@@ -2419,8 +2427,7 @@
           </div>
           <div class="footer-bottom">
             <p>
-              © 2025 DIGITAL-MIND PROJECT "Интенции и уязвимости цифрового
-              разума". Индивидуальный исследовательский проект.
+              © 2025 DIGITAL-MIND PROJECT "ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ: УЯЗВИМОСТИ, АРХИТЕКТУРА И ВЛИЯНИЕ НА ОБЩЕСТВО". Индивидуальный исследовательский проект.
             </p>
           </div>
         </div>
